@@ -16,7 +16,7 @@ toast.id = "toast";
 document.body.appendChild(toast);
 
 // API URL
-const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api';
+const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : 'https://dairydash-backend.vercel.app/api'; // TODO: Update with your Vercel URL
 
 // MOCK DATA (Fallback)
 const MOCK_PRODUCTS = [

@@ -6,27 +6,26 @@ const dotenv = require('dotenv');
 // Load env vars
 dotenv.config();
 
-// Connect to Database
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/dairydash', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
-  }
-};
-
-connectDB();
-
 const app = express();
 
 // Middleware
-app.use(cors());
+// Allow all origins for simplicity during initial deployment.
+// For production security, restrict to specific domains (e.g., GitHub Pages URL).
+app.use(cors({
+    origin: '*',
+    credentials: true
+}));
 app.use(express.json());
+
+// Connect to Database (only if not already connected in serverless)
+if (mongoose.connection.readyState === 0) {
+    mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/dairydash', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => console.log('MongoDB Connected'))
+    .catch((err) => console.error('MongoDB Connection Error:', err));
+}
 
 // Routes
 app.use('/api/auth', require('./routes/auth.routes'));
@@ -39,6 +38,10 @@ app.get('/', (req, res) => {
   res.send('DairyDash API is running...');
 });
 
+app.get('/api', (req, res) => {
+    res.send('DairyDash API Endpoint');
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -48,8 +51,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+// For local development
+if (require.main === module) {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Export for Vercel
+module.exports = app;
