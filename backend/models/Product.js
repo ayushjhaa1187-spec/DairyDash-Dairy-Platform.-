@@ -15,10 +15,18 @@ const ProductSchema = new mongoose.Schema({
     required: true,
     min: 0
   },
+  discountPrice: {
+    type: Number,
+    min: 0
+  },
+  unit: {
+    type: String,
+    default: '500ml' // e.g., 500ml, 1kg, 200g
+  },
   category: {
     type: String,
     required: true,
-    enum: ['Milk', 'Paneer & Cheese', 'Curd & Yogurt', 'Butter & Ghee', 'Ice Cream', 'Other']
+    enum: ['Milk', 'Paneer & Cheese', 'Curd & Yogurt', 'Butter & Ghee', 'Ice Cream', 'Beverages', 'Other']
   },
   stock: {
     type: Number,
@@ -33,6 +41,10 @@ const ProductSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  isBestSeller: {
+    type: Boolean,
+    default: false
   },
   createdAt: {
     type: Date,
