@@ -3,6 +3,10 @@ const router = express.Router();
 const Product = require('../models/Product');
 const authenticate = require('../middleware/authenticate');
 
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
 // Get all products
 router.get('/all', async (req, res) => {
   try {
@@ -13,9 +17,10 @@ router.get('/all', async (req, res) => {
       query.category = category;
     }
     if (search) {
+      const searchRegex = escapeRegex(String(search));
       query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
+        { name: { $regex: searchRegex, $options: 'i' } },
+        { description: { $regex: searchRegex, $options: 'i' } }
       ];
     }
 
