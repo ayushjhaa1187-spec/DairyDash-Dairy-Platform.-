@@ -17,9 +17,7 @@ module.exports = {
   // CORS Configuration
   CORS_ORIGIN: [
     'https://ayushjhaa1187-spec.github.io',
-    'https://ayushjhaa1187-spec.github.io/DairyDash-Dairy-Platform.-',
-    'http://localhost:3000',
-    'http://localhost:8000'
+    'https://ayushjhaa1187-spec.github.io/DairyDash-Dairy-Platform.-'
   ],
   
   // API Configuration
