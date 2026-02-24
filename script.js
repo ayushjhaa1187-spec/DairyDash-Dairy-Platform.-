@@ -8,6 +8,15 @@ styleSheet.innerText = `
     #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
     @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
     @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+    /* Accessibility Styles */
+    .high-contrast { background-color: #000 !important; color: #FFD700 !important; }
+    .high-contrast * { background-color: #000 !important; color: #FFD700 !important; border-color: #FFF !important; }
+    .high-contrast img { filter: grayscale(100%) contrast(150%); }
+
+    .large-targets button, .large-targets a, .large-targets input { min-height: 60px; min-width: 60px; font-size: 1.2em; }
+
+    .dyslexia-font * { font-family: 'OpenDyslexic', sans-serif !important; }
 `;
 document.head.appendChild(styleSheet);
 
@@ -21,6 +30,11 @@ window.onload = function() {
     if (window.location.pathname.includes('cart.html')) renderCartPage();
     if (window.location.pathname.includes('tracking.html')) loadTrackingInfo();
     if (window.location.pathname.includes('orders.html')) loadOrderHistory();
+
+    // Initialize Shop if grid exists
+    if (document.getElementById('products-grid')) {
+        filterProducts('all');
+    }
 };
 
 /* =========================================
@@ -118,7 +132,7 @@ function placeOrder(event) {
         date: new Date().toLocaleDateString(),
         status: "Shipped", // We simulate it being shipped immediately
         items: cart,
-        total: document.getElementById('total-price') ? document.getElementById('total-price').innerText : '$99.99' // Grab total from page if possible
+        total: document.getElementById('total-price') ? document.getElementById('total-price').innerText : '9.99' // Grab total from page if possible
     };
 
     // 1. Get Existing History (List of orders)
@@ -188,4 +202,88 @@ function loadOrderHistory() {
         container.style.display = 'block';
         if(emptyMsg) emptyMsg.style.display = 'none';
     }
+}
+
+/* =========================================
+   4. SHOP & ACCESSIBILITY LOGIC
+   ========================================= */
+
+// Mock Product Data
+const PRODUCTS = [
+    { id: 1, name: "Fresh Whole Milk", category: "milk", price: "4.99", image: "https://placehold.co/400x300?text=Milk", rating: "★★★★★" },
+    { id: 2, name: "Low Fat Milk", category: "milk", price: "4.49", image: "https://placehold.co/400x300?text=Low+Fat+Milk", rating: "★★★★☆" },
+    { id: 3, name: "Natural Curd", category: "curd", price: "3.99", image: "https://placehold.co/400x300?text=Curd", rating: "★★★★★" },
+    { id: 4, name: "Probiotic Yogurt", category: "curd", price: "5.99", image: "https://placehold.co/400x300?text=Yogurt", rating: "★★★★☆" },
+    { id: 5, name: "Malai Paneer", category: "paneer", price: "8.99", image: "https://placehold.co/400x300?text=Paneer", rating: "★★★★★" },
+    { id: 6, name: "Salted Butter", category: "butter", price: "6.49", image: "https://placehold.co/400x300?text=Butter", rating: "★★★★★" },
+    { id: 7, name: "Pure Ghee", category: "butter", price: "12.99", image: "https://placehold.co/400x300?text=Ghee", rating: "★★★★★" },
+    { id: 8, name: "Masala Chaas", category: "beverages", price: "2.99", image: "https://placehold.co/400x300?text=Chaas", rating: "★★★★☆" },
+    { id: 9, name: "Sweet Lassi", category: "beverages", price: "3.49", image: "https://placehold.co/400x300?text=Lassi", rating: "★★★★★" }
+];
+
+// Accessibility Functions
+function toggleMenu() {
+    const menu = document.getElementById('a11y-menu');
+    const btn = document.getElementById('a11y-btn');
+    if (menu) {
+        menu.classList.toggle('open');
+        const isExpanded = menu.classList.contains('open');
+        if (btn) btn.setAttribute('aria-expanded', isExpanded);
+    }
+}
+
+function setContrast(mode) {
+    if (mode === 'high') {
+        document.body.classList.toggle('high-contrast');
+    }
+}
+
+function toggleLargeTargets() {
+    document.body.classList.toggle('large-targets');
+}
+
+function toggleDyslexia() {
+    document.body.classList.toggle('dyslexia-font');
+}
+
+// Product Filtering & Rendering
+function filterProducts(category) {
+    const grid = document.getElementById('products-grid');
+    if (!grid) return;
+
+    // Update active button state
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => {
+        if (btn.getAttribute('onclick').includes(category)) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    // Filter products
+    const filtered = category === 'all'
+        ? PRODUCTS
+        : PRODUCTS.filter(p => p.category === category);
+
+    // Render
+    grid.innerHTML = filtered.map(product => `
+        <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group">
+            <div class="relative h-48 overflow-hidden">
+                <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-sm font-bold shadow-sm rating">${product.rating}</div>
+            </div>
+            <div class="p-5">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">${product.name}</h3>
+                    <span class="price-badge text-white px-2 py-1 rounded-md text-sm font-bold">$${product.price}</span>
+                </div>
+                <p class="text-gray-500 text-sm mb-4">Fresh & Organic</p>
+                <button onclick="addToCart('${product.name}', '${product.price}', '${product.image}')" class="w-full btn-primary text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 group-hover:bg-[#0F3E3E]">
+                    <span>Add to Cart</span>
+                    <span>+</span>
+                </button>
+            </div>
+        </div>
+    `).join('');
 }
