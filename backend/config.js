@@ -1,17 +1,24 @@
 // DairyDash Backend Configuration
 // Production-ready configuration for deployment
 
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
+// Validate essential environment variables in production
+if (NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+  throw new Error('FATAL ERROR: JWT_SECRET is not defined in production environment.');
+}
+
 module.exports = {
   // Server Configuration
   PORT: process.env.PORT || 5000,
-  NODE_ENV: process.env.NODE_ENV || 'development',
+  NODE_ENV,
   
   // Database Configuration
   MONGODB_URI: process.env.MONGODB_URI || 'mongodb://localhost:27017/dairydash',
   DB_NAME: process.env.DATABASE_NAME || 'dairydash',
   
   // JWT Configuration
-  JWT_SECRET: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production-minimum-32-characters',
+  JWT_SECRET: process.env.JWT_SECRET,
   JWT_EXPIRE: '7d',
   
   // CORS Configuration
