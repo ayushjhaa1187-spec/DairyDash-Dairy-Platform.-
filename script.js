@@ -26,15 +26,30 @@ window.onload = function() {
 /* =========================================
    2. CART LOGIC (FIX FOR ADD TO CART)
    ========================================= */
+// Helper to get cart from storage
+function getCart() {
+    return JSON.parse(localStorage.getItem('seniorCart')) || [];
+}
+
+// Helper to save cart to storage
+function saveCart(cart) {
+    localStorage.setItem('seniorCart', JSON.stringify(cart));
+}
+
+// Helper to clear cart
+function clearCart() {
+    localStorage.removeItem('seniorCart');
+}
+
 function addToCart(productName, price, image) {
     // 1. Get existing cart
-    let cart = JSON.parse(localStorage.getItem('seniorCart')) || [];
+    let cart = getCart();
     
     // 2. Add new item
     cart.push({ name: productName, price: price, img: image });
     
     // 3. Save back to storage
-    localStorage.setItem('seniorCart', JSON.stringify(cart));
+    saveCart(cart);
     
     // 4. Update Header Count
     updateCartCount();
@@ -44,7 +59,7 @@ function addToCart(productName, price, image) {
 }
 
 function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('seniorCart')) || [];
+    const cart = getCart();
     const countElements = document.querySelectorAll('.cart-count-display');
     countElements.forEach(el => el.innerText = `Cart (${cart.length})`);
 }
@@ -57,7 +72,7 @@ function showToast(message) {
 }
 
 function renderCartPage() {
-    const cart = JSON.parse(localStorage.getItem('seniorCart')) || [];
+    const cart = getCart();
     const container = document.getElementById('cart-items-container');
     const emptyMsg = document.getElementById('empty-cart-msg');
     const summary = document.getElementById('cart-summary');
@@ -93,9 +108,9 @@ function renderCartPage() {
 }
 
 function removeItem(index) {
-    let cart = JSON.parse(localStorage.getItem('seniorCart')) || [];
+    let cart = getCart();
     cart.splice(index, 1);
-    localStorage.setItem('seniorCart', JSON.stringify(cart));
+    saveCart(cart);
     renderCartPage();
     updateCartCount();
 }
@@ -106,7 +121,7 @@ function removeItem(index) {
 function placeOrder(event) {
     event.preventDefault(); 
     
-    const cart = JSON.parse(localStorage.getItem('seniorCart')) || [];
+    const cart = getCart();
     if(cart.length === 0) {
         alert("Your cart is empty!");
         return;
@@ -134,7 +149,7 @@ function placeOrder(event) {
     localStorage.setItem('seniorLastOrder', JSON.stringify(newOrder));
 
     // 5. Clear Cart & Redirect
-    localStorage.removeItem('seniorCart');
+    clearCart();
     window.location.href = 'success.html';
 }
 
