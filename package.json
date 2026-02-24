@@ -1,0 +1,28 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com) [![Made with Love in India](https://img.shields.io/badge/Made%20with%20%E2%9D%A4%EF%B8%8F-in%20India-orange.svg)](https://en.wikipedia.org/wiki/India)",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayushjhaa1187-spec/DairyDash-Dairy-Platform.-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ayushjhaa1187-spec/DairyDash-Dairy-Platform.-/issues"
+  },
+  "homepage": "https://github.com/ayushjhaa1187-spec/DairyDash-Dairy-Platform.-#readme",
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  }
+}
