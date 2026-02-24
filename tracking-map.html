@@ -24,6 +24,7 @@
         .btn { padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 15px; width: 100%; }
         .btn:hover { background: #764ba2; }
         .location-icon { font-size: 24px; color: #667eea; }
+        .error-message { background: #fee2e2; color: #b91c1c; padding: 10px; border-radius: 5px; margin-bottom: 20px; display: none; }
         @media (max-width: 768px) {
             .tracking-wrapper { grid-template-columns: 1fr; }
             .map { height: 300px; }
@@ -36,6 +37,8 @@
             <h1>📍 Real-Time Order Tracking</h1>
             <p>Track your dairy delivery like Flipkart</p>
         </div>
+
+        <div id="error-container" class="error-message"></div>
 
         <div class="tracking-wrapper">
             <div class="map-container">
@@ -51,28 +54,28 @@
             <div class="sidebar">
                 <h3 style="margin-bottom: 20px; color: #333;">📦 Order Status</h3>
                 
-                <div class="status-item active">
-                    <strong>✓ Order Confirmed</strong>
-                    <div class="status-time">Today, 2:30 PM</div>
+                <div id="status-pending" class="status-item">
+                    <strong>Order Confirmed</strong>
+                    <div class="status-time">Waiting...</div>
                 </div>
 
-                <div class="status-item active">
-                    <strong>✓ Picked Up</strong>
-                    <div class="status-time">Today, 2:45 PM</div>
+                <div id="status-picked-up" class="status-item">
+                    <strong>Picked Up</strong>
+                    <div class="status-time">Pending</div>
                 </div>
 
-                <div class="status-item active">
-                    <strong>🚗 In Transit</strong>
-                    <div class="status-time">Today, 3:15 PM</div>
+                <div id="status-in-transit" class="status-item">
+                    <strong>In Transit</strong>
+                    <div class="status-time">Pending</div>
                 </div>
 
-                <div class="status-item">
-                    <strong>🏠 Out for Delivery</strong>
-                    <div class="status-time">Estimated: 3:45 PM</div>
+                <div id="status-out-for-delivery" class="status-item">
+                    <strong>Out for Delivery</strong>
+                    <div class="status-time">Pending</div>
                 </div>
 
-                <div class="status-item">
-                    <strong>✓ Delivered</strong>
+                <div id="status-delivered" class="status-item">
+                    <strong>Delivered</strong>
                     <div class="status-time">Pending</div>
                 </div>
 
@@ -80,21 +83,21 @@
                     <h4 style="margin-bottom: 15px; color: #333;">👤 Delivery Partner</h4>
                     <div class="info-row">
                         <span class="label">Name:</span>
-                        <span class="value">Rajesh Kumar</span>
+                        <span id="driver-name" class="value">Not Assigned</span>
                     </div>
                     <div class="info-row">
                         <span class="label">Phone:</span>
-                        <span class="value">+91 98765 43210</span>
+                        <span id="driver-phone" class="value">N/A</span>
                     </div>
                     <div class="info-row">
                         <span class="label">Vehicle:</span>
-                        <span class="value">DL-01-AB-1234</span>
+                        <span id="vehicle-number" class="value">N/A</span>
                     </div>
                     <div class="info-row">
                         <span class="label">Distance:</span>
-                        <span class="value">2.5 km</span>
+                        <span id="distance" class="value">Calculating...</span>
                     </div>
-                    <button class="btn" onclick="alert('Call delivery partner functionality')">📞 Call Driver</button>
+                    <button class="btn" onclick="callDriver()">📞 Call Driver</button>
                     <button class="btn" style="background: #27ae60; margin-top: 10px;" onclick="alert('Chat functionality coming soon')">💬 Chat</button>
                 </div>
             </div>
@@ -102,13 +105,128 @@
     </div>
 
     <script>
-        // Real-time tracking simulation
-        console.log('Order Tracking Page Loaded');
-        
-        // TODO: Integrate with backend API
-        // fetch('/api/delivery/orderId')
-        //   .then(response => response.json())
-        //   .then(data => updateTrackingUI(data))
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId');
+        const errorContainer = document.getElementById('error-container');
+
+        function showError(message) {
+            errorContainer.innerText = message;
+            errorContainer.style.display = 'block';
+        }
+
+        function updateTrackingUI(data) {
+            if (!data || !data.tracking) return;
+            const tracking = data.tracking;
+
+            // Update status items
+            const statusMap = {
+                'Pending': 'status-pending',
+                'Picked Up': 'status-picked-up',
+                'In Transit': 'status-in-transit',
+                'Out for Delivery': 'status-out-for-delivery',
+                'Delivered': 'status-delivered'
+            };
+
+            const statuses = ['Pending', 'Picked Up', 'In Transit', 'Out for Delivery', 'Delivered'];
+            const currentIndex = statuses.indexOf(tracking.status);
+
+            statuses.forEach((status, index) => {
+                const elementId = statusMap[status];
+                const element = document.getElementById(elementId);
+                if (element) {
+                    if (index <= currentIndex) {
+                        element.classList.add('active');
+                        const strong = element.querySelector('strong');
+                        if (!strong.innerText.startsWith('✓')) {
+                            strong.innerText = '✓ ' + strong.innerText.replace('✓ ', '');
+                        }
+                        // Update time if available in history
+                        const historyItem = tracking.trackingHistory.find(h => h.status === status);
+                        if (historyItem) {
+                            const date = new Date(historyItem.timestamp);
+                            element.querySelector('.status-time').innerText = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        }
+                    } else {
+                        element.classList.remove('active');
+                        element.querySelector('.status-time').innerText = 'Pending';
+                    }
+                }
+            });
+
+            // Update delivery info
+            document.getElementById('driver-name').innerText = tracking.deliveryPersonName || 'Not Assigned';
+            document.getElementById('driver-phone').innerText = tracking.deliveryPersonPhone || 'N/A';
+            document.getElementById('vehicle-number').innerText = tracking.vehicleNumber || 'N/A';
+            document.getElementById('distance').innerText = tracking.distance ? tracking.distance + ' km' : 'Calculating...';
+
+            window.currentDriverPhone = tracking.deliveryPersonPhone;
+        }
+
+        function callDriver() {
+            if (window.currentDriverPhone && window.currentDriverPhone !== 'N/A') {
+                window.location.href = `tel:${window.currentDriverPhone}`;
+            } else {
+                alert('Driver phone number not available');
+            }
+        }
+
+        async function fetchTrackingData() {
+            if (!orderId) {
+                showError('Error: No orderId provided in the URL. Simulation mode active.');
+                return;
+            }
+
+            try {
+                // Get token from localStorage if available
+                const token = localStorage.getItem('token') || localStorage.getItem('seniorToken');
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                const response = await fetch(`/api/delivery/${orderId}`, { headers });
+                const data = await response.json();
+
+                if (data.success) {
+                    updateTrackingUI(data);
+                    errorContainer.style.display = 'none';
+                } else {
+                    showError('Failed to fetch tracking data: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching tracking data:', error);
+                showError('Error connecting to the server. Please try again later.');
+            }
+        }
+
+        // Initial fetch
+        if (orderId) {
+            console.log('Fetching tracking data for order:', orderId);
+            fetchTrackingData();
+            // Poll every 30 seconds
+            setInterval(fetchTrackingData, 30000);
+        } else {
+            console.log('No orderId found, running in simulation mode');
+            // Mock data for simulation if no orderId
+            const mockData = {
+                success: true,
+                tracking: {
+                    status: 'In Transit',
+                    deliveryPersonName: 'Rajesh Kumar (Simulation)',
+                    deliveryPersonPhone: '+91 98765 43210',
+                    vehicleNumber: 'DL-01-AB-1234',
+                    distance: 2.5,
+                    trackingHistory: [
+                        { status: 'Pending', timestamp: new Date().setHours(14, 30) },
+                        { status: 'Picked Up', timestamp: new Date().setHours(14, 45) },
+                        { status: 'In Transit', timestamp: new Date().setHours(15, 15) }
+                    ]
+                }
+            };
+            updateTrackingUI(mockData);
+        }
     </script>
 </body>
 </html>
