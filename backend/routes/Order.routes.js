@@ -72,6 +72,13 @@ router.get('/:orderId/track', authenticate, async (req, res) => {
       return res.status(404).json({ success: false, message: 'Order not found' });
     }
 
+    // Security check: Ensure the order belongs to the requesting user
+    // Checks both userId (from routes) and customerId (from schema) to be safe
+    const orderOwnerId = order.userId || order.customerId;
+    if (!orderOwnerId || orderOwnerId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: 'Unauthorized access to this order' });
+    }
+
     res.json({ success: true, order, tracking });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
