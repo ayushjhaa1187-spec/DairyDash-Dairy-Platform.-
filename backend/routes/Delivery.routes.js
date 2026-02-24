@@ -36,10 +36,11 @@ router.put('/:orderId/update-location', authenticate, async (req, res) => {
       }
     });
 
-    await tracking.save();
-
-    // Update order status
-    await Order.findByIdAndUpdate(req.params.orderId, { status: tracking.status });
+    // Update tracking and order status concurrently
+    await Promise.all([
+      tracking.save(),
+      Order.findByIdAndUpdate(req.params.orderId, { status: tracking.status })
+    ]);
 
     res.json({ success: true, message: 'Location updated', tracking });
   } catch (error) {
@@ -114,8 +115,11 @@ router.put('/:orderId/mark-delivered', authenticate, async (req, res) => {
       location: tracking.currentLocation
     });
 
-    await tracking.save();
-    await Order.findByIdAndUpdate(req.params.orderId, { status: 'Delivered' });
+    // Update tracking and order status concurrently
+    await Promise.all([
+      tracking.save(),
+      Order.findByIdAndUpdate(req.params.orderId, { status: 'Delivered' })
+    ]);
 
     res.json({ success: true, message: 'Order marked as delivered', tracking });
   } catch (error) {
