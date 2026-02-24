@@ -51,48 +51,48 @@
             <div class="sidebar">
                 <h3 style="margin-bottom: 20px; color: #333;">📦 Order Status</h3>
                 
-                <div class="status-item active">
+                <div class="status-item" id="status-confirmed">
                     <strong>✓ Order Confirmed</strong>
-                    <div class="status-time">Today, 2:30 PM</div>
+                    <div class="status-time" id="time-confirmed">Today, 2:30 PM</div>
                 </div>
 
-                <div class="status-item active">
+                <div class="status-item" id="status-picked-up">
                     <strong>✓ Picked Up</strong>
-                    <div class="status-time">Today, 2:45 PM</div>
+                    <div class="status-time" id="time-picked-up">Today, 2:45 PM</div>
                 </div>
 
-                <div class="status-item active">
+                <div class="status-item" id="status-in-transit">
                     <strong>🚗 In Transit</strong>
-                    <div class="status-time">Today, 3:15 PM</div>
+                    <div class="status-time" id="time-in-transit">Today, 3:15 PM</div>
                 </div>
 
-                <div class="status-item">
+                <div class="status-item" id="status-out-for-delivery">
                     <strong>🏠 Out for Delivery</strong>
-                    <div class="status-time">Estimated: 3:45 PM</div>
+                    <div class="status-time" id="time-out-for-delivery">Estimated: 3:45 PM</div>
                 </div>
 
-                <div class="status-item">
+                <div class="status-item" id="status-delivered">
                     <strong>✓ Delivered</strong>
-                    <div class="status-time">Pending</div>
+                    <div class="status-time" id="time-delivered">Pending</div>
                 </div>
 
                 <div class="delivery-info">
                     <h4 style="margin-bottom: 15px; color: #333;">👤 Delivery Partner</h4>
                     <div class="info-row">
                         <span class="label">Name:</span>
-                        <span class="value">Rajesh Kumar</span>
+                        <span class="value" id="partner-name">Rajesh Kumar</span>
                     </div>
                     <div class="info-row">
                         <span class="label">Phone:</span>
-                        <span class="value">+91 98765 43210</span>
+                        <span class="value" id="partner-phone">+91 98765 43210</span>
                     </div>
                     <div class="info-row">
                         <span class="label">Vehicle:</span>
-                        <span class="value">DL-01-AB-1234</span>
+                        <span class="value" id="partner-vehicle">DL-01-AB-1234</span>
                     </div>
                     <div class="info-row">
                         <span class="label">Distance:</span>
-                        <span class="value">2.5 km</span>
+                        <span class="value" id="delivery-distance">2.5 km</span>
                     </div>
                     <button class="btn" onclick="alert('Call delivery partner functionality')">📞 Call Driver</button>
                     <button class="btn" style="background: #27ae60; margin-top: 10px;" onclick="alert('Chat functionality coming soon')">💬 Chat</button>
@@ -102,13 +102,126 @@
     </div>
 
     <script>
-        // Real-time tracking simulation
+        // Real-time tracking
         console.log('Order Tracking Page Loaded');
-        
-        // TODO: Integrate with backend API
-        // fetch('/api/delivery/orderId')
-        //   .then(response => response.json())
-        //   .then(data => updateTrackingUI(data))
+
+        // Extract Order ID from URL or LocalStorage
+        function getOrderId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let orderId = urlParams.get('id') || urlParams.get('orderId');
+
+            if (!orderId) {
+                const lastOrder = JSON.parse(localStorage.getItem('seniorLastOrder'));
+                if (lastOrder && lastOrder.id) {
+                    orderId = lastOrder.id;
+                }
+            }
+            return orderId;
+        }
+
+        const orderId = getOrderId();
+        console.log('Tracking Order ID:', orderId);
+
+        if (orderId) {
+            // Initial fetch
+            fetchTrackingData(orderId);
+            // Poll for updates every 30 seconds
+            setInterval(() => fetchTrackingData(orderId), 30000);
+        } else {
+            console.error('No Order ID found for tracking');
+            // Graceful fallback for demo if no order ID is found
+            console.log('Using simulation mode as no order ID was found');
+        }
+
+        function fetchTrackingData(id) {
+            fetch(`/api/delivery/${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success && data.tracking) {
+                        updateTrackingUI(data.tracking);
+                    } else {
+                        console.error('Failed to fetch tracking data:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching tracking data:', error);
+                    // If API fails, we keep the simulated data or show an error
+                });
+        }
+
+        function updateTrackingUI(tracking) {
+            // Update Delivery Partner Info
+            if (document.getElementById('partner-name'))
+                document.getElementById('partner-name').textContent = tracking.deliveryPersonName || 'Rajesh Kumar';
+            if (document.getElementById('partner-phone'))
+                document.getElementById('partner-phone').textContent = tracking.deliveryPersonPhone || '+91 98765 43210';
+            if (document.getElementById('partner-vehicle'))
+                document.getElementById('partner-vehicle').textContent = tracking.vehicleNumber || 'DL-01-AB-1234';
+            if (document.getElementById('delivery-distance'))
+                document.getElementById('delivery-distance').textContent = tracking.distance ? `${tracking.distance} km` : '2.5 km';
+
+            // Status Mapping
+            const statusMap = {
+                'Pending': 1,
+                'Confirmed': 1,
+                'Picked Up': 2,
+                'In Transit': 3,
+                'Out for Delivery': 4,
+                'Delivered': 5
+            };
+
+            const currentStatusLevel = statusMap[tracking.status] || 0;
+
+            // Helper to update status item
+            const updateStatusItem = (id, level) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (currentStatusLevel >= level) {
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
+                }
+            };
+
+            updateStatusItem('status-confirmed', 1);
+            updateStatusItem('status-picked-up', 2);
+            updateStatusItem('status-in-transit', 3);
+            updateStatusItem('status-out-for-delivery', 4);
+            updateStatusItem('status-delivered', 5);
+
+            // Update Timestamps if available in trackingHistory
+            if (tracking.trackingHistory && tracking.trackingHistory.length > 0) {
+                tracking.trackingHistory.forEach(history => {
+                    const date = new Date(history.timestamp);
+                    const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const dateStr = date.toLocaleDateString();
+                    const fullTimeStr = `${dateStr}, ${timeStr}`;
+
+                    if (history.status === 'Pending' || history.status === 'Confirmed') {
+                        const el = document.getElementById('time-confirmed');
+                        if (el) el.textContent = fullTimeStr;
+                    } else if (history.status === 'Picked Up') {
+                        const el = document.getElementById('time-picked-up');
+                        if (el) el.textContent = fullTimeStr;
+                    } else if (history.status === 'In Transit') {
+                        const el = document.getElementById('time-in-transit');
+                        if (el) el.textContent = fullTimeStr;
+                    } else if (history.status === 'Out for Delivery') {
+                        const el = document.getElementById('time-out-for-delivery');
+                        if (el) el.textContent = fullTimeStr;
+                    } else if (history.status === 'Delivered') {
+                        const el = document.getElementById('time-delivered');
+                        if (el) el.textContent = fullTimeStr;
+                    }
+                });
+            }
+        }
     </script>
 </body>
 </html>
