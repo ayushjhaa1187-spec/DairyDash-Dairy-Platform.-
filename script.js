@@ -189,3 +189,39 @@ function loadOrderHistory() {
         if(emptyMsg) emptyMsg.style.display = 'none';
     }
 }
+
+/* =========================================
+   4. TRACKING INFO LOGIC (FIX FOR TRACKING PAGE)
+   ========================================= */
+function loadTrackingInfo() {
+    const lastOrderData = localStorage.getItem('seniorLastOrder');
+    let lastOrder = null;
+    try {
+        lastOrder = lastOrderData ? JSON.parse(lastOrderData) : null;
+    } catch (e) {
+        console.error("Error parsing last order data", e);
+    }
+
+    const container = document.getElementById('tracking-container');
+    const noOrderMsg = document.getElementById('no-order-msg');
+
+    if (!lastOrder) {
+        if(container) container.style.display = 'none';
+        if(noOrderMsg) noOrderMsg.style.display = 'block';
+        return;
+    }
+
+    if(noOrderMsg) noOrderMsg.style.display = 'none';
+    if(container) container.style.display = 'block';
+
+    const orderIdEl = document.getElementById('order-id-display');
+    const orderDateEl = document.getElementById('order-date-display');
+    const itemCountEl = document.getElementById('item-count-display');
+
+    if (orderIdEl) orderIdEl.innerText = '#' + (lastOrder.id || 'Unknown');
+    if (orderDateEl) orderDateEl.innerText = lastOrder.date || 'Unknown';
+    if (itemCountEl) {
+        const count = lastOrder.items ? lastOrder.items.length : 0;
+        itemCountEl.innerText = count + (count === 1 ? ' Item' : ' Items');
+    }
+}
