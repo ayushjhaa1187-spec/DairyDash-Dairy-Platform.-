@@ -1,6 +1,52 @@
 /* =========================================
    1. ACCESSIBILITY & STYLES
    ========================================= */
+function toggleMenu() {
+    const menu = document.getElementById('a11y-menu');
+    const btn = document.getElementById('a11y-btn');
+    if (menu) {
+        menu.classList.toggle('open');
+        const isOpen = menu.classList.contains('open');
+        if (btn) btn.setAttribute('aria-expanded', isOpen);
+    }
+}
+
+function setContrast(mode) {
+    if (mode === 'high') {
+        const isHigh = document.body.classList.toggle('contrast-high');
+        localStorage.setItem('a11y-high-contrast', isHigh);
+        showToast(isHigh ? "High contrast enabled" : "High contrast disabled");
+    }
+}
+
+function toggleLargeTargets() {
+    const isLarge = document.body.classList.toggle('large-targets');
+    localStorage.setItem('a11y-large-targets', isLarge);
+    showToast(isLarge ? "Large buttons enabled" : "Large buttons disabled");
+}
+
+function toggleDyslexia() {
+    const isDyslexia = document.body.classList.toggle('dyslexia-mode');
+    localStorage.setItem('a11y-dyslexia', isDyslexia);
+    showToast(isDyslexia ? "Dyslexia font enabled" : "Dyslexia font disabled");
+}
+
+function initA11y() {
+    if (localStorage.getItem('a11y-high-contrast') === 'true') {
+        document.body.classList.add('contrast-high');
+    }
+    if (localStorage.getItem('a11y-large-targets') === 'true') {
+        document.body.classList.add('large-targets');
+        const largeCheckboxes = [document.getElementById('large-mode'), document.getElementById('large-mode-home')];
+        largeCheckboxes.forEach(cb => { if(cb) cb.checked = true; });
+    }
+    if (localStorage.getItem('a11y-dyslexia') === 'true') {
+        document.body.classList.add('dyslexia-mode');
+        const dyslexiaCheckboxes = [document.getElementById('dyslexia-mode'), document.getElementById('dyslexia-mode-home')];
+        dyslexiaCheckboxes.forEach(cb => { if(cb) cb.checked = true; });
+    }
+}
+
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
     /* Toast Notification */
@@ -17,6 +63,7 @@ document.body.appendChild(toast);
 
 // ON PAGE LOAD
 window.onload = function() {
+    initA11y();
     updateCartCount(); // Update header count
     if (window.location.pathname.includes('cart.html')) renderCartPage();
     if (window.location.pathname.includes('tracking.html')) loadTrackingInfo();
