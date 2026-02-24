@@ -1,0 +1,19 @@
+{
+  "name": "dairydash-frontend",
+  "version": "1.0.0",
+  "description": "Frontend tests for DairyDash",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "testEnvironmentOptions": {
+      "runScripts": "dangerously",
+      "resources": "usable"
+    }
+  }
+}
