@@ -65,10 +65,11 @@ router.get('/my-orders', authenticate, async (req, res) => {
 // Get order details with tracking
 router.get('/:orderId/track', authenticate, async (req, res) => {
   try {
-    const order = await Order.findById(req.params.orderId);
+    const order = await Order.findOne({ _id: req.params.orderId, $or: [{ customerId: req.user._id }, { userId: req.user._id }] });
     const tracking = await DeliveryTracking.findOne({ orderId: req.params.orderId });
 
-    if (!order || !tracking) {
+    if (!order) { return res.status(404).json({ success: false, message: 'Order not found or unauthorized' }); }
+    if (!tracking) {
       return res.status(404).json({ success: false, message: 'Order not found' });
     }
 
@@ -82,12 +83,9 @@ router.get('/:orderId/track', authenticate, async (req, res) => {
 router.put('/:orderId/status', authenticate, async (req, res) => {
   try {
     const { status } = req.body;
-    const order = await Order.findByIdAndUpdate(
-      req.params.orderId,
-      { status },
-      { new: true }
-    );
+    const order = await Order.findOneAndUpdate({ _id: req.params.orderId, $or: [{ customerId: req.user._id }, { userId: req.user._id }] }, { status }, { new: true });
 
+    if (!order) { return res.status(404).json({ success: false, message: 'Order not found or unauthorized' }); }
     res.json({ success: true, message: 'Order status updated', order });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
@@ -97,12 +95,9 @@ router.put('/:orderId/status', authenticate, async (req, res) => {
 // Cancel order
 router.post('/:orderId/cancel', authenticate, async (req, res) => {
   try {
-    const order = await Order.findByIdAndUpdate(
-      req.params.orderId,
-      { status: 'Cancelled' },
-      { new: true }
-    );
+    const order = await Order.findOneAndUpdate({ _id: req.params.orderId, $or: [{ customerId: req.user._id }, { userId: req.user._id }] }, { status: 'Cancelled' }, { new: true });
 
+    if (!order) { return res.status(404).json({ success: false, message: 'Order not found or unauthorized' }); }
     res.json({ success: true, message: 'Order cancelled successfully', order });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
