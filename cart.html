@@ -31,7 +31,7 @@
 
     <main class="container mx-auto px-4 py-8 flex-grow">
         <h1 class="text-3xl font-bold mb-8 text-gray-800">🛒 Your Cart</h1>
-        
+
         <div id="cart-items" class="space-y-4 mb-8"></div>
         <div id="empty-cart" class="hidden text-center py-12">
             <p class="text-2xl text-gray-600 mb-4">Your cart is empty</p>
@@ -65,27 +65,37 @@
 
     <script src="script.js"></script>
     <script>
+
+        function escapeHTML(str) {
+            if (str == null) return '';
+            return String(str).replace(/&/g, '&amp;')
+                      .replace(/</g, '&lt;')
+                      .replace(/>/g, '&gt;')
+                      .replace(/"/g, '&quot;')
+                      .replace(/'/g, '&#39;');
+        }
+
         function loadCart() {
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             const cartItems = document.getElementById('cart-items');
             const emptyCart = document.getElementById('empty-cart');
-            
+
             if (cart.length === 0) {
                 cartItems.classList.add('hidden');
                 emptyCart.classList.remove('hidden');
                 return;
             }
-            
+
             cartItems.classList.remove('hidden');
             emptyCart.classList.add('hidden');
-            
+
             cartItems.innerHTML = cart.map((item, index) => `
                 <div class="bg-white p-4 rounded-lg shadow flex justify-between items-center">
                     <div class="flex items-center gap-4">
-                        <span class="text-4xl">${item.image}</span>
+                        <span class="text-4xl">${escapeHTML(item.image)}</span>
                         <div>
-                            <h3 class="font-bold">${item.name}</h3>
-                            <p class="text-green-700 font-bold">₹${item.price}</p>
+                            <h3 class="font-bold">${escapeHTML(item.name)}</h3>
+                            <p class="text-green-700 font-bold">₹${escapeHTML(String(item.price))}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-4">
@@ -98,7 +108,7 @@
                     </div>
                 </div>
             `).join('');
-            
+
             updateSummary(cart);
         }
 
@@ -121,7 +131,7 @@
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const delivery = subtotal >= 199 ? 0 : 40;
             const total = subtotal + delivery;
-            
+
             document.getElementById('subtotal').textContent = '₹' + subtotal;
             document.getElementById('delivery').textContent = delivery === 0 ? 'FREE' : '₹' + delivery;
             document.getElementById('total').textContent = '₹' + total;

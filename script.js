@@ -23,6 +23,15 @@ window.onload = function() {
     if (window.location.pathname.includes('orders.html')) loadOrderHistory();
 };
 
+function escapeHTML(str) {
+    if (str == null) return '';
+    return String(str).replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#39;');
+}
+
 /* =========================================
    2. CART LOGIC (FIX FOR ADD TO CART)
    ========================================= */
@@ -78,10 +87,10 @@ function renderCartPage() {
             total += parseFloat(item.price);
             const itemHTML = `
                 <div class="flex flex-col md:flex-row items-center gap-6 bg-white p-4 rounded-xl shadow border border-gray-200 mb-4">
-                    <img src="${item.img}" class="w-24 h-24 object-cover rounded-lg bg-gray-100 border border-gray-300">
+                    <img src="${escapeHTML(item.img)}" class="w-24 h-24 object-cover rounded-lg bg-gray-100 border border-gray-300">
                     <div class="flex-grow text-center md:text-left">
-                        <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
-                        <p class="text-gray-600 text-lg">$${item.price}</p>
+                        <h3 class="text-xl font-bold text-gray-800">${escapeHTML(item.name)}</h3>
+                        <p class="text-gray-600 text-lg">$${escapeHTML(String(item.price))}</p>
                     </div>
                     <button onclick="removeItem(${index})" class="text-red-600 font-bold underline px-4 py-2 hover:bg-red-50 rounded text-lg">Remove</button>
                 </div>
@@ -153,18 +162,18 @@ function loadOrderHistory() {
         container.innerHTML = '';
         history.forEach(order => {
             // Build a string of item names (e.g., "Phone, Pills")
-            const itemNames = order.items.map(i => i.name).join(", ");
+            const itemNames = order.items.map(i => escapeHTML(i.name)).join(", ");
             
             const card = `
                 <div class="bg-white p-6 rounded-xl shadow-md border-2 border-gray-100 mb-6">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b pb-4">
                         <div>
-                            <span class="text-sm text-gray-500 font-bold uppercase">Order #${order.id}</span>
-                            <div class="text-xl font-bold text-gray-800">${order.date}</div>
+                            <span class="text-sm text-gray-500 font-bold uppercase">Order #${escapeHTML(String(order.id))}</span>
+                            <div class="text-xl font-bold text-gray-800">${escapeHTML(order.date)}</div>
                         </div>
                         <div class="mt-2 md:mt-0">
                             <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-bold text-lg">
-                                🚚 ${order.status}
+                                🚚 ${escapeHTML(order.status)}
                             </span>
                         </div>
                     </div>
