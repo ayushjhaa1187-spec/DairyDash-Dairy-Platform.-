@@ -3,10 +3,40 @@ const router = express.Router();
 const Order = require('../models/Order');
 const DeliveryTracking = require('../models/DeliveryTracking');
 const authenticate = require('../middleware/authenticate');
+const { body, validationResult } = require('express-validator');
 
 // Create new order
-router.post('/create', authenticate, async (req, res) => {
+router.post('/create', [
+  authenticate,
+  // Validate items
+  body('items').isArray({ min: 1 }).withMessage('Items must be a non-empty array'),
+  body('items.*.productId').isMongoId().withMessage('Invalid product ID'),
+  body('items.*.productName').optional().isString().trim().escape(),
+  body('items.*.quantity').isInt({ min: 1 }).withMessage('Quantity must be at least 1'),
+  body('items.*.price').isFloat({ min: 0 }).withMessage('Price must be a positive number'),
+  body('items.*.subtotal').isFloat({ min: 0 }).withMessage('Subtotal must be a positive number'),
+
+  body('totalPrice').isFloat({ min: 0 }).withMessage('Total price must be a positive number'),
+
+  // Validate deliveryAddress
+  body('deliveryAddress').optional().isObject().withMessage('Delivery address must be an object'),
+  body('deliveryAddress.street').optional().isString().trim().escape(),
+  body('deliveryAddress.city').optional().isString().trim().escape(),
+  body('deliveryAddress.state').optional().isString().trim().escape(),
+  body('deliveryAddress.postalCode').optional().isString().trim().escape(),
+  body('deliveryAddress.country').optional().isString().trim().escape(),
+  body('deliveryAddress.latitude').optional().isNumeric(),
+  body('deliveryAddress.longitude').optional().isNumeric(),
+
+  // Validate deliveryPhone
+  body('deliveryPhone').optional().isString().trim().escape()
+], async (req, res) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array() });
+    }
+
     const { items, totalPrice, deliveryAddress, deliveryPhone } = req.body;
 
     const order = new Order({
