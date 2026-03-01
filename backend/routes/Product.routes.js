@@ -13,17 +13,24 @@ router.get('/all', async (req, res) => {
       query.category = category;
     }
     if (search) {
-      query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
-      ];
+      query.$text = { $search: search };
     }
 
     const skip = (page - 1) * limit;
-    const products = await Product.find(query)
+
+    // Sort logic - score sorting if text search, otherwise creation date
+    let sortQuery = { createdAt: -1 };
+    let projection = {};
+
+    if (search) {
+        projection = { score: { $meta: 'textScore' } };
+        sortQuery = { score: { $meta: 'textScore' } };
+    }
+
+    const products = await Product.find(query, projection)
       .limit(parseInt(limit))
       .skip(skip)
-      .sort({ createdAt: -1 });
+      .sort(sortQuery);
 
     const total = await Product.countDocuments(query);
 
