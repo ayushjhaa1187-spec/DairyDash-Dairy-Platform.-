@@ -195,7 +195,7 @@ function displayProducts(products) {
 ### 3. Shopping Cart
 
 ```javascript
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let cart = getSafeStorage('cart', []);
 
 function addToCart(productId, quantity = 1) {
   const existingItem = cart.find(item => item.productId === productId);
