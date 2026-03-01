@@ -15,6 +15,21 @@ const toast = document.createElement("div");
 toast.id = "toast";
 document.body.appendChild(toast);
 
+
+function escapeHTML(str) {
+    if (typeof str !== 'string') return str;
+    return str.replace(/[&<>'"]/g, function(tag) {
+        const charsToReplace = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        };
+        return charsToReplace[tag] || tag;
+    });
+}
+
 // ON PAGE LOAD
 window.onload = function() {
     updateCartCount(); // Update header count
@@ -74,20 +89,25 @@ function renderCartPage() {
         if(summary) summary.style.display = 'block';
 
         let total = 0;
+        let htmlContent = '';
         cart.forEach((item, index) => {
             total += parseFloat(item.price);
+            const safeImg = escapeHTML(item.img);
+            const safeName = escapeHTML(item.name);
+            const safePrice = escapeHTML(String(item.price));
             const itemHTML = `
                 <div class="flex flex-col md:flex-row items-center gap-6 bg-white p-4 rounded-xl shadow border border-gray-200 mb-4">
-                    <img src="${item.img}" class="w-24 h-24 object-cover rounded-lg bg-gray-100 border border-gray-300">
+                    <img src="${safeImg}" class="w-24 h-24 object-cover rounded-lg bg-gray-100 border border-gray-300">
                     <div class="flex-grow text-center md:text-left">
-                        <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
-                        <p class="text-gray-600 text-lg">$${item.price}</p>
+                        <h3 class="text-xl font-bold text-gray-800">${safeName}</h3>
+                        <p class="text-gray-600 text-lg">$${safePrice}</p>
                     </div>
                     <button onclick="removeItem(${index})" class="text-red-600 font-bold underline px-4 py-2 hover:bg-red-50 rounded text-lg">Remove</button>
                 </div>
             `;
-            container.innerHTML += itemHTML;
+            htmlContent += itemHTML;
         });
+        container.innerHTML = htmlContent;
         document.getElementById('total-price').innerText = '$' + total.toFixed(2);
     }
 }
@@ -150,21 +170,24 @@ function loadOrderHistory() {
     }
 
     if(container) {
-        container.innerHTML = '';
+        let htmlContent = '';
         history.forEach(order => {
             // Build a string of item names (e.g., "Phone, Pills")
-            const itemNames = order.items.map(i => i.name).join(", ");
+            const itemNames = order.items.map(i => escapeHTML(i.name)).join(", ");
+            const safeOrderId = escapeHTML(String(order.id));
+            const safeOrderDate = escapeHTML(order.date);
+            const safeOrderStatus = escapeHTML(order.status);
             
             const card = `
                 <div class="bg-white p-6 rounded-xl shadow-md border-2 border-gray-100 mb-6">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b pb-4">
                         <div>
-                            <span class="text-sm text-gray-500 font-bold uppercase">Order #${order.id}</span>
-                            <div class="text-xl font-bold text-gray-800">${order.date}</div>
+                            <span class="text-sm text-gray-500 font-bold uppercase">Order #${safeOrderId}</span>
+                            <div class="text-xl font-bold text-gray-800">${safeOrderDate}</div>
                         </div>
                         <div class="mt-2 md:mt-0">
                             <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-bold text-lg">
-                                🚚 ${order.status}
+                                🚚 ${safeOrderStatus}
                             </span>
                         </div>
                     </div>
@@ -182,8 +205,9 @@ function loadOrderHistory() {
                     </div>
                 </div>
             `;
-            container.innerHTML += card;
+            htmlContent += card;
         });
+        container.innerHTML = htmlContent;
         
         container.style.display = 'block';
         if(emptyMsg) emptyMsg.style.display = 'none';
