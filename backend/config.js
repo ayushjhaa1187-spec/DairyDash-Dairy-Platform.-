@@ -15,7 +15,10 @@ module.exports = {
   JWT_EXPIRE: '7d',
   
   // CORS Configuration
-  CORS_ORIGIN: [
+  CORS_ORIGIN: process.env.NODE_ENV === 'production' ? [
+    'https://ayushjhaa1187-spec.github.io',
+    'https://ayushjhaa1187-spec.github.io/DairyDash-Dairy-Platform.-'
+  ] : [
     'https://ayushjhaa1187-spec.github.io',
     'https://ayushjhaa1187-spec.github.io/DairyDash-Dairy-Platform.-',
     'http://localhost:3000',
