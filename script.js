@@ -88,7 +88,7 @@ function renderCartPage() {
             `;
             container.innerHTML += itemHTML;
         });
-        document.getElementById('total-price').innerText = '$' + total.toFixed(2);
+        const tpEl = document.getElementById('total-price'); if (tpEl) tpEl.innerText = '$' + total.toFixed(2);
     }
 }
 
