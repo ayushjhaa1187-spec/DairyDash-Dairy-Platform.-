@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/opendyslexic@2.0.0/open-dyslexic.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
     <style>
         * { font-family: 'Plus Jakarta Sans', sans-serif; }
         :root { --primary: #1B5E5F; --accent: #FFB84D; --success: #6DC24E; --light-bg: #F5F9F8; }
@@ -23,7 +24,7 @@
 </head>
 <body class="flex flex-col min-h-screen">
     <a href="#main-content" class="absolute -top-96 left-0 bg-[var(--primary)] text-white p-4 z-50 focus:top-0 text-xl font-bold transition-all">Skip to Main Content</a>
-    
+
     <!-- HEADER -->
     <header class="bg-white shadow-lg relative z-40 p-4" role="banner">
         <div class="container mx-auto">
@@ -35,7 +36,7 @@
                         <p class="text-sm text-gray-600 font-medium">Fresh in 10-15 mins</p>
                     </div>
                 </a>
-                
+
                 <div class="flex items-center gap-3">
                     <div class="relative">
                         <button id="a11y-btn" onclick="toggleMenu()" class="flex items-center gap-2 bg-gray-100 border-2 border-gray-400 text-gray-800 px-4 py-3 rounded-lg font-bold hover:bg-gray-200 shadow-sm" aria-expanded="false" aria-controls="a11y-menu">
@@ -55,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <a href="cart.html" class="flex items-center gap-2 btn-primary text-white px-5 py-3 rounded-lg font-bold shadow-md" aria-label="Shopping Cart">
                         <span class="text-2xl" aria-hidden="true">🛒</span>
                         <span class="cart-count-display" aria-live="polite">Cart (0)</span>
@@ -64,7 +65,7 @@
             </div>
         </div>
     </header>
-    
+
     <!-- MAIN CONTENT -->
     <main id="main-content" class="flex-grow">
         <!-- HERO SECTION -->
@@ -95,31 +96,31 @@
                 </div>
             </div>
         </section>
-        
+
         <!-- CATEGORIES SECTION -->
         <section class="container mx-auto px-4 py-16">
             <h2 class="text-4xl font-bold mb-4 text-[var(--primary)]">Shop by Category</h2>
             <p class="text-gray-600 text-lg mb-12">Browse our premium selection of fresh dairy products</p>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <a href="shop.html" class="bg-white rounded-2xl p-8 card-hover border-2 border-gray-100 shadow-md text-center group">
                     <div class="text-6xl mb-4" aria-hidden="true">🥛</div>
                     <h3 class="text-2xl font-bold text-[var(--primary)] group-hover:underline">Milk</h3>
                     <p class="text-gray-600 mt-2">Full cream, toned & flavored</p>
                 </a>
-                
+
                 <a href="health.html" class="bg-white rounded-2xl p-8 card-hover border-2 border-gray-100 shadow-md text-center group">
                     <div class="text-6xl mb-4" aria-hidden="true">🧀</div>
                     <h3 class="text-2xl font-bold text-[var(--primary)] group-hover:underline">Paneer & Cheese</h3>
                     <p class="text-gray-600 mt-2">Fresh cottage cheese & varieties</p>
                 </a>
-                
+
                 <a href="vision.html" class="bg-white rounded-2xl p-8 card-hover border-2 border-gray-100 shadow-md text-center group">
                     <div class="text-6xl mb-4" aria-hidden="true">🍨</div>
                     <h3 class="text-2xl font-bold text-[var(--primary)] group-hover:underline">Curd & Yogurt</h3>
                     <p class="text-gray-600 mt-2">Fresh dahi, greek yogurt & lassi</p>
                 </a>
-                
+
                 <a href="bathroom.html" class="bg-white rounded-2xl p-8 card-hover border-2 border-gray-100 shadow-md text-center group">
                     <div class="text-6xl mb-4" aria-hidden="true">🧈</div>
                     <h3 class="text-2xl font-bold text-[var(--primary)] group-hover:underline">Butter & Ghee</h3>
@@ -127,7 +128,7 @@
                 </a>
             </div>
         </section>
-        
+
         <!-- WHY DAIRYDASH -->
         <section class="bg-white py-16 border-t border-b border-gray-200">
             <div class="container mx-auto px-4">
@@ -152,7 +153,7 @@
             </div>
         </section>
     </main>
-    
+
     <!-- FOOTER -->
     <footer class="bg-[var(--primary)] text-white pt-12 pb-6 mt-auto" role="contentinfo">
         <div class="container mx-auto px-4 text-center">
@@ -166,7 +167,7 @@
             <p class="text-sm text-gray-400 mt-4">WCAG 2.1 Level AA Accessible | All Features Available</p>
         </div>
     </footer>
-    
+
     <script src="script.js"></script>
 </body>
 </html>

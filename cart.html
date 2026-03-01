@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/open-dyslexic@2.0.0/open-dyslexic.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
     <style>
         :root { --primary: #16803D; --bg-color: #F8FAFC; --focus-ring: #59E0B0; }
         body { font-family: 'Source Sans 3', sans-serif; background-color: var(--bg-color); line-height: 1.6; position: absolute; top: 100%; right: 0; width: 340px; background: white; }
@@ -31,7 +32,7 @@
 
     <main class="container mx-auto px-4 py-8 flex-grow">
         <h1 class="text-3xl font-bold mb-8 text-gray-800">🛒 Your Cart</h1>
-        
+
         <div id="cart-items" class="space-y-4 mb-8"></div>
         <div id="empty-cart" class="hidden text-center py-12">
             <p class="text-2xl text-gray-600 mb-4">Your cart is empty</p>
@@ -69,16 +70,16 @@
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             const cartItems = document.getElementById('cart-items');
             const emptyCart = document.getElementById('empty-cart');
-            
+
             if (cart.length === 0) {
                 cartItems.classList.add('hidden');
                 emptyCart.classList.remove('hidden');
                 return;
             }
-            
+
             cartItems.classList.remove('hidden');
             emptyCart.classList.add('hidden');
-            
+
             cartItems.innerHTML = cart.map((item, index) => `
                 <div class="bg-white p-4 rounded-lg shadow flex justify-between items-center">
                     <div class="flex items-center gap-4">
@@ -98,7 +99,7 @@
                     </div>
                 </div>
             `).join('');
-            
+
             updateSummary(cart);
         }
 
@@ -121,7 +122,7 @@
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const delivery = subtotal >= 199 ? 0 : 40;
             const total = subtotal + delivery;
-            
+
             document.getElementById('subtotal').textContent = '₹' + subtotal;
             document.getElementById('delivery').textContent = delivery === 0 ? 'FREE' : '₹' + delivery;
             document.getElementById('total').textContent = '₹' + total;
