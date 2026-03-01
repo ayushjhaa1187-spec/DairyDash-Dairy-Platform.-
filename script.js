@@ -189,3 +189,29 @@ function loadOrderHistory() {
         if(emptyMsg) emptyMsg.style.display = 'none';
     }
 }
+
+function loadTrackingInfo() {
+    const lastOrder = JSON.parse(localStorage.getItem('seniorLastOrder'));
+    const trackingContainer = document.getElementById('tracking-container');
+    const noOrderMsg = document.getElementById('no-order-msg');
+
+    if (!lastOrder) {
+        if (trackingContainer) trackingContainer.style.display = 'none';
+        if (noOrderMsg) noOrderMsg.style.display = 'block';
+        return;
+    }
+
+    if (trackingContainer) trackingContainer.style.display = 'block';
+    if (noOrderMsg) noOrderMsg.style.display = 'none';
+
+    const orderIdDisplay = document.getElementById('order-id-display');
+    const orderDateDisplay = document.getElementById('order-date-display');
+    const itemCountDisplay = document.getElementById('item-count-display');
+
+    if (orderIdDisplay) orderIdDisplay.innerText = '#' + lastOrder.id;
+    if (orderDateDisplay) orderDateDisplay.innerText = lastOrder.date;
+    if (itemCountDisplay) {
+        const itemsCount = lastOrder.items ? lastOrder.items.length : 0;
+        itemCountDisplay.innerText = itemsCount + (itemsCount === 1 ? ' Item' : ' Items');
+    }
+}
