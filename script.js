@@ -74,9 +74,10 @@ function renderCartPage() {
         if(summary) summary.style.display = 'block';
 
         let total = 0;
+        let htmlBuffer = '';
         cart.forEach((item, index) => {
             total += parseFloat(item.price);
-            const itemHTML = `
+            htmlBuffer += `
                 <div class="flex flex-col md:flex-row items-center gap-6 bg-white p-4 rounded-xl shadow border border-gray-200 mb-4">
                     <img src="${item.img}" class="w-24 h-24 object-cover rounded-lg bg-gray-100 border border-gray-300">
                     <div class="flex-grow text-center md:text-left">
@@ -86,8 +87,8 @@ function renderCartPage() {
                     <button onclick="removeItem(${index})" class="text-red-600 font-bold underline px-4 py-2 hover:bg-red-50 rounded text-lg">Remove</button>
                 </div>
             `;
-            container.innerHTML += itemHTML;
         });
+        container.innerHTML = htmlBuffer;
         document.getElementById('total-price').innerText = '$' + total.toFixed(2);
     }
 }
