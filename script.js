@@ -189,3 +189,6 @@ function loadOrderHistory() {
         if(emptyMsg) emptyMsg.style.display = 'none';
     }
 }
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { placeOrder };
+}
