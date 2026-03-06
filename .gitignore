@@ -1,0 +1,6 @@
+node_modules/
+**/node_modules/
+coverage/
+backend/coverage/
+backend/node_modules/
+.env
