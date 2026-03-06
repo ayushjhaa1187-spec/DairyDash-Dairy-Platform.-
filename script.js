@@ -1,27 +1,31 @@
 /* =========================================
    1. ACCESSIBILITY & STYLES
    ========================================= */
-const styleSheet = document.createElement("style");
-styleSheet.innerText = `
-    /* Toast Notification */
-    #toast { visibility: hidden; min-width: 250px; margin-left: -125px; background-color: #208090; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 100; left: 50%; bottom: 30px; font-size: 17px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-    #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-    @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-    @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-`;
-document.head.appendChild(styleSheet);
+if (typeof document !== 'undefined') {
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+        /* Toast Notification */
+        #toast { visibility: hidden; min-width: 250px; margin-left: -125px; background-color: #208090; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 100; left: 50%; bottom: 30px; font-size: 17px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    `;
+    document.head.appendChild(styleSheet);
 
-const toast = document.createElement("div");
-toast.id = "toast";
-document.body.appendChild(toast);
+    const toast = document.createElement("div");
+    toast.id = "toast";
+    document.body.appendChild(toast);
+}
 
 // ON PAGE LOAD
-window.onload = function() {
-    updateCartCount(); // Update header count
-    if (window.location.pathname.includes('cart.html')) renderCartPage();
-    if (window.location.pathname.includes('tracking.html')) loadTrackingInfo();
-    if (window.location.pathname.includes('orders.html')) loadOrderHistory();
-};
+if (typeof window !== 'undefined') {
+    window.onload = function() {
+        updateCartCount(); // Update header count
+        if (window.location.pathname.includes('cart.html')) renderCartPage();
+        if (window.location.pathname.includes('tracking.html')) loadTrackingInfo();
+        if (window.location.pathname.includes('orders.html')) loadOrderHistory();
+    };
+}
 
 /* =========================================
    2. CART LOGIC (FIX FOR ADD TO CART)
@@ -188,4 +192,11 @@ function loadOrderHistory() {
         container.style.display = 'block';
         if(emptyMsg) emptyMsg.style.display = 'none';
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        removeItem,
+        // export other functions if needed for future tests
+    };
 }
