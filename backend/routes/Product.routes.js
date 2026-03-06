@@ -3,6 +3,11 @@ const router = express.Router();
 const Product = require('../models/Product');
 const authenticate = require('../middleware/authenticate');
 
+// Helper function to escape regex special characters
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
 // Get all products
 router.get('/all', async (req, res) => {
   try {
@@ -13,9 +18,10 @@ router.get('/all', async (req, res) => {
       query.category = category;
     }
     if (search) {
+      const safeSearch = escapeRegex(search);
       query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
+        { name: { $regex: safeSearch, $options: 'i' } },
+        { description: { $regex: safeSearch, $options: 'i' } }
       ];
     }
 
