@@ -11,7 +11,12 @@ module.exports = {
   DB_NAME: process.env.DATABASE_NAME || 'dairydash',
   
   // JWT Configuration
-  JWT_SECRET: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production-minimum-32-characters',
+  JWT_SECRET: (() => {
+    if (!process.env.JWT_SECRET && process.env.NODE_ENV !== 'test') {
+      throw new Error('FATAL ERROR: JWT_SECRET is not defined in environment variables.');
+    }
+    return process.env.JWT_SECRET;
+  })(),
   JWT_EXPIRE: '7d',
   
   // CORS Configuration
