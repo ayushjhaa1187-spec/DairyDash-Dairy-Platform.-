@@ -20,12 +20,13 @@ router.get('/all', async (req, res) => {
     }
 
     const skip = (page - 1) * limit;
-    const products = await Product.find(query)
-      .limit(parseInt(limit))
-      .skip(skip)
-      .sort({ createdAt: -1 });
-
-    const total = await Product.countDocuments(query);
+    const [products, total] = await Promise.all([
+      Product.find(query)
+        .limit(parseInt(limit))
+        .skip(skip)
+        .sort({ createdAt: -1 }),
+      Product.countDocuments(query)
+    ]);
 
     res.json({
       success: true,
