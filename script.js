@@ -23,6 +23,20 @@ window.onload = function() {
     if (window.location.pathname.includes('orders.html')) loadOrderHistory();
 };
 
+/**
+ * Escapes HTML characters to prevent XSS.
+ * @param {string} str - The string to escape.
+ * @returns {string} - The escaped string.
+ */
+function escapeHTML(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 /* =========================================
    2. CART LOGIC (FIX FOR ADD TO CART)
    ========================================= */
@@ -150,26 +164,27 @@ function loadOrderHistory() {
     }
 
     if(container) {
-        container.innerHTML = '';
+        let historyHTML = '';
         history.forEach(order => {
             // Build a string of item names (e.g., "Phone, Pills")
-            const itemNames = order.items.map(i => i.name).join(", ");
+            const itemNames = order.items.map(i => escapeHTML(i.name)).join(", ");
             
             const card = `
                 <div class="bg-white p-6 rounded-xl shadow-md border-2 border-gray-100 mb-6">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b pb-4">
                         <div>
-                            <span class="text-sm text-gray-500 font-bold uppercase">Order #${order.id}</span>
-                            <div class="text-xl font-bold text-gray-800">${order.date}</div>
+                            <span class="text-sm text-gray-500 font-bold uppercase">Order #${escapeHTML(order.id)}</span>
+                            <div class="text-xl font-bold text-gray-800">${escapeHTML(order.date)}</div>
                         </div>
                         <div class="mt-2 md:mt-0">
                             <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-bold text-lg">
-                                🚚 ${order.status}
+                                🚚 ${escapeHTML(order.status)}
                             </span>
                         </div>
                     </div>
                     <div class="mb-4">
                         <p class="text-gray-600 text-lg"><span class="font-bold">Items:</span> ${itemNames}</p>
+                        <p class="text-gray-800 font-bold text-xl mt-2">Total: ${escapeHTML(order.total || '$0.00')}</p>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <div class="flex items-center gap-3">
@@ -182,9 +197,9 @@ function loadOrderHistory() {
                     </div>
                 </div>
             `;
-            container.innerHTML += card;
+            historyHTML += card;
         });
-        
+        container.innerHTML = historyHTML;
         container.style.display = 'block';
         if(emptyMsg) emptyMsg.style.display = 'none';
     }
