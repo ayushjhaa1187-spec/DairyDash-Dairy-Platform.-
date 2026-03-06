@@ -65,8 +65,10 @@ router.get('/my-orders', authenticate, async (req, res) => {
 // Get order details with tracking
 router.get('/:orderId/track', authenticate, async (req, res) => {
   try {
-    const order = await Order.findById(req.params.orderId);
-    const tracking = await DeliveryTracking.findOne({ orderId: req.params.orderId });
+    const [order, tracking] = await Promise.all([
+      Order.findById(req.params.orderId),
+      DeliveryTracking.findOne({ orderId: req.params.orderId })
+    ]);
 
     if (!order || !tracking) {
       return res.status(404).json({ success: false, message: 'Order not found' });
