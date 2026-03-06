@@ -1,6 +1,7 @@
 /* =========================================
    1. ACCESSIBILITY & STYLES
    ========================================= */
+if (typeof document !== 'undefined') {
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
     /* Toast Notification */
@@ -10,18 +11,23 @@ styleSheet.innerText = `
     @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 `;
 document.head.appendChild(styleSheet);
+}
 
+if (typeof document !== 'undefined') {
 const toast = document.createElement("div");
 toast.id = "toast";
 document.body.appendChild(toast);
+}
 
 // ON PAGE LOAD
+if (typeof window !== 'undefined') {
 window.onload = function() {
     updateCartCount(); // Update header count
     if (window.location.pathname.includes('cart.html')) renderCartPage();
     if (window.location.pathname.includes('tracking.html')) loadTrackingInfo();
     if (window.location.pathname.includes('orders.html')) loadOrderHistory();
 };
+}
 
 /* =========================================
    2. CART LOGIC (FIX FOR ADD TO CART)
@@ -189,3 +195,4 @@ function loadOrderHistory() {
         if(emptyMsg) emptyMsg.style.display = 'none';
     }
 }
+if (typeof module !== 'undefined' && module.exports) { module.exports = { addToCart, updateCartCount, showToast, renderCartPage, removeItem, placeOrder, loadOrderHistory }; }
