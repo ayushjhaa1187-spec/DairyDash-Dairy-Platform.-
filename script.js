@@ -189,3 +189,16 @@ function loadOrderHistory() {
         if(emptyMsg) emptyMsg.style.display = 'none';
     }
 }
+
+// Export functions for testing
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        addToCart,
+        updateCartCount,
+        showToast,
+        renderCartPage,
+        removeItem,
+        placeOrder,
+        loadOrderHistory
+    };
+}
