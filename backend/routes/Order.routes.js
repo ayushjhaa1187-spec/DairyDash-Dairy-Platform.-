@@ -54,7 +54,8 @@ router.get('/my-orders', authenticate, async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.user._id })
       .populate('items.productId')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
     res.json({ success: true, orders });
   } catch (error) {
