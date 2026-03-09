@@ -1,341 +1,228 @@
 # 🥛 DairyDash - Quick Commerce Dairy Platform
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-16.x-green.svg)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express.js-4.x-lightgrey.svg)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-7.x-brightgreen.svg)](https://www.mongodb.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-[![Made with Love in India](https://img.shields.io/badge/Made%20with%20%E2%9D%A4%EF%B8%8F-in%20India-orange.svg)](https://en.wikipedia.org/wiki/India)
 
-> **Enterprise-Ready Quick Commerce Platform for Fresh Dairy Products** - Delivering farm-fresh dairy to your doorstep in 10-15 minutes
+**Enterprise-Ready Quick Commerce Platform for Fresh Dairy Products** — Delivering farm-fresh dairy to your doorstep in 10-15 minutes.
 
-## 🚀 Live Demo
-
-🔗 **Frontend**: [DairyDash Live](https://yourusername.github.io/DairyDash)
-🔗 **Admin Dashboard**: [Admin Panel](https://admin.dairydash.com)
-
-## 📋 Table of Contents
-
-- [Features](#-features)
-- [Tech Stack](#️-tech-stack)
-- [Project Structure](#-project-structure)
-- [Installation](#-installation)
-- [API Documentation](#-api-documentation)
-- [Screenshots](#-screenshots)
-- [Business Model](#-business-model)
-- [Roadmap](#️-roadmap)
-- [Contributing](#-contributing)
-- [License](#-license)
-
-## ✨ Features
-
-### Customer Features
-- 🛒 **Real-time Inventory** - Live stock updates from connected dairy farms
-- ⚡ **10-15 Min Delivery** - Hyperlocal delivery within 3km radius
-- 💳 **Multiple Payment Options** - UPI, Cards, Wallets, COD
-- 📍 **Live Order Tracking** - Real-time GPS tracking of delivery
-- 🔔 **Smart Notifications** - SMS, WhatsApp, Push notifications
-- 💰 **Dynamic Pricing** - Peak/off-peak pricing algorithm
-- 🎁 **Loyalty Program** - Earn coins on every purchase
-- 📅 **Subscription Service** - Daily milk subscription
-- ⭐ **Rating & Reviews** - Quality feedback system
-
-### Vendor/Admin Features
-- 📊 **Analytics Dashboard** - Sales, revenue, customer insights
-- 📦 **Inventory Management** - Real-time stock tracking
-- 🚚 **Delivery Management** - Route optimization & partner allocation
-- 👥 **Customer Management** - CRM with purchase history
-- 💵 **Financial Reports** - Revenue, refunds, commissions
-- 🎯 **Marketing Tools** - Promo codes, campaigns, offers
-- 📱 **Vendor App** - Mobile app for dairy farmers
-
-### Technical Features
-- 🔐 **JWT Authentication** - Secure user sessions
-- 🗄️ **Database Optimization** - Indexed queries, caching
-- 🌐 **RESTful API** - Well-documented endpoints
-- 📧 **Email System** - Order confirmations, OTPs
-- 🔄 **Webhook Integration** - Payment gateway webhooks
-- 📈 **Scalable Architecture** - Microservices ready
-- 🛡️ **Security Best Practices** - HTTPS, CORS, rate limiting
-
-## 🛠️ Tech Stack
-
-### Frontend
-```
-- HTML5, CSS3, JavaScript (ES6+)
-- Tailwind CSS - Utility-first CSS framework
-- Web APIs - Geolocation, Notifications
-```
-
-### Backend (Recommended)
-```
-- Node.js - JavaScript runtime
-- Express.js - Web framework
-- MongoDB - NoSQL database
-- Redis - Caching & session store
-- Socket.io - Real-time communication
-```
-
-### Payment Integration
-```
-- Razorpay - Indian payment gateway
-- Stripe - International payments
-```
-
-### Delivery & Logistics
-```
-- Google Maps API - Routing & tracking
-- Twilio - SMS notifications
-- Firebase - Push notifications
-```
-
-## 📁 Project Structure
-
-```
-DairyDash/
-├── frontend/
-│   ├── index.html
-│   ├── shop.html
-│   ├── cart.html
-│   ├── health.html (Cheese & Paneer)
-│   ├── vision.html (Curd & Yogurt)
-│   ├── orders.html
-│   ├── tracking.html
-│   ├── payment.html
-│   ├── success.html
-│   ├── style.css
-│   └── script.js
-├── backend/ (To be implemented)
-│   ├── server.js
-│   ├── routes/
-│   ├── controllers/
-│   ├── models/
-│   ├── middleware/
-│   └── utils/
-├── admin/ (To be implemented)
-│   └── dashboard/
-└── README.md
-```
-
-## 🔧 Installation
-
-### Prerequisites
-```bash
-Node.js >= 16.x
-MongoDB >= 5.x
-Redis >= 6.x
-```
-
-### Quick Start
-
-1. **Clone the repository**
-```bash
-git clone https://github.com/yourusername/DairyDash.git
-cd DairyDash
-```
-
-2. **Install dependencies**
-```bash
-npm install
-```
-
-3. **Setup environment variables**
-```bash
-cp .env.example .env
-# Edit .env with your configuration
-```
-
-4. **Start the development server**
-```bash
-npm run dev
-```
-
-5. **Access the application**
-```
-Frontend: http://localhost:3000
-Admin: http://localhost:3000/admin
-API: http://localhost:5000/api
-```
-
-## 📡 API Documentation
-
-### Authentication
-```
-POST /api/auth/register - Register new user
-POST /api/auth/login - User login
-POST /api/auth/verify-otp - Verify OTP
-```
-
-### Products
-```
-GET /api/products - Get all products
-GET /api/products/:id - Get product details
-GET /api/products/category/:category - Get by category
-```
-
-### Orders
-```
-POST /api/orders - Create new order
-GET /api/orders/:id - Get order details
-GET /api/orders/track/:id - Track order
-PUT /api/orders/:id/cancel - Cancel order
-```
-
-### Payments
-```
-POST /api/payments/create - Create payment
-POST /api/payments/verify - Verify payment
-GET /api/payments/:id - Get payment status
-```
-
-## 📸 Screenshots
-
-### Customer App
-| Home | Products | Cart |
-|------|----------|------|
-| ![Home](screenshots/home.png) | ![Products](screenshots/products.png) | ![Cart](screenshots/cart.png) |
-
-### Admin Dashboard
-| Analytics | Orders | Inventory |
-|-----------|--------|------------|
-| ![Analytics](screenshots/admin-analytics.png) | ![Orders](screenshots/admin-orders.png) | ![Inventory](screenshots/admin-inventory.png) |
-
-## 💼 Business Model
-
-### Revenue Streams
-1. **Commission** - 15-20% on each order
-2. **Delivery Charges** - ₹20-40 per order
-3. **Subscriptions** - Monthly milk subscription plans
-4. **Premium Listing** - Vendor promotion fees
-5. **Advertising** - Banner ads for dairy brands
-
-### Target Market
-- Urban households (Tier 1 & 2 cities)
-- Young professionals
-- Health-conscious consumers
-- Elderly population
-
-### Competitive Advantages
-- ⚡ **Fastest Delivery** - 10-15 minutes
-- 🎯 **Hyperlocal** - Focus on quality over scale
-- 🤝 **Direct Sourcing** - From verified dairy farms
-- 💯 **Quality Assurance** - Temperature-controlled delivery
-
-## 🗺️ Roadmap
-
-### Phase 1 (Current) - MVP
-- [x] Frontend UI/UX
-- [x] Product catalog
-- [x] Shopping cart
-- [ ] Backend API
-- [ ] Payment integration
-
-### Phase 2 - Core Features
-- [ ] User authentication
-- [ ] Order management
-- [ ] Real-time tracking
-- [ ] Admin dashboard
-- [ ] Vendor onboarding
-
-### Phase 3 - Advanced Features
-- [ ] Mobile apps (Android/iOS)
-- [ ] AI-based recommendations
-- [ ] Voice ordering
-- [ ] Dark stores network
-- [ ] Cold chain logistics
-
-### Phase 4 - Scale
-- [ ] Multi-city expansion
-- [ ] B2B wholesale platform
-- [ ] White-label solution
-- [ ] Franchise model
-
-## 🎯 Market Opportunity
-
-### Indian Dairy Market
-- Market Size: **$140 Billion** (2025)
-- Growth Rate: **15% CAGR**
-- Online Penetration: **<5%** (Huge opportunity)
-- Daily Milk Consumption: **400M Liters**
-
-### Quick Commerce Growth
-- Projected Market: **$5 Billion** by 2027
-- User Base: **50M+** active users
-- Avg Order Value: **₹400-600**
-
-## 🔐 Security Features
-
-- ✅ HTTPS encryption
-- ✅ JWT token authentication
-- ✅ Password hashing (bcrypt)
-- ✅ SQL injection prevention
-- ✅ XSS protection
-- ✅ CSRF tokens
-- ✅ Rate limiting
-- ✅ Input validation
-- ✅ Secure headers (Helmet.js)
-
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 Author
-
-**Ayush Kumar Jha**
-- GitHub: [@ayushjhaa1187-spec](https://github.com/ayushjhaa1187-spec)
-- LinkedIn: [Connect with me](https://linkedin.com/in/yourprofile)
-- Email: your.email@example.com
-
-## 🙏 Acknowledgments
-
-- Inspired by successful quick commerce platforms
-- Thanks to the open-source community
-- Built with ❤️ for the Indian dairy industry
-
-## 💰 Pricing (For Sale)
-
-### Package Options
-
-**Starter** - ₹25,000
-- Complete frontend code
-- Basic documentation
-- 30 days support
-
-**Professional** - ₹50,000
-- Frontend + Backend API
-- Database schema
-- Payment integration
-- 90 days support
-
-**Enterprise** - ₹1,00,000
-- Complete full-stack application
-- Admin dashboard
-- Mobile apps (Android + iOS)
-- Deployment support
-- 1 year support
-- White-label ready
-
-**Custom Solution** - Contact for quote
-- Tailored features
-- Dedicated development
-- Ongoing maintenance
-
-📧 **Contact**: ayushjha@example.com
-📱 **WhatsApp**: +91-XXXXXXXXXX
+DairyDash is a comprehensive e-commerce ecosystem built to handle rapid hyperlocal deliveries. It combines a responsive customer-facing frontend with a robust Express/MongoDB backend, featuring real-time tracking, multiple payment gateways, and automated notifications.
 
 ---
 
-<div align="center">
+## 📸 Demo / Screenshots
 
-### ⭐ Star this repo if you find it useful!
+| Home | Products | Cart |
+|------|----------|------|
+| ![Home](https://via.placeholder.com/300x400.png?text=Home+Screen) | ![Products](https://via.placeholder.com/300x400.png?text=Products+Screen) | ![Cart](https://via.placeholder.com/300x400.png?text=Cart+Screen) |
 
-**Made with ❤️ in India 🇮🇳**
+*(Note: Replace placeholder images with actual screenshots from the `screenshots/` directory if available.)*
 
-</div>
+---
+
+## ✨ Features
+
+### Customer Experience
+- 🛒 **Real-Time Inventory:** Live stock updates directly from connected dairy farms.
+- ⚡ **10-15 Min Delivery:** Hyperlocal delivery network targeting a 3km radius.
+- 📍 **Live Order Tracking:** Real-time GPS tracking of deliveries via Google Maps integration.
+- 💳 **Flexible Payments:** Integration with Razorpay and Stripe for UPI, Cards, and Wallets.
+- 🔔 **Smart Notifications:** SMS (Twilio), WhatsApp, and Push Notifications (Firebase).
+
+### Vendor & Admin Tools
+- 📊 **Analytics Dashboard:** Insights into sales, revenue, and customer behaviors.
+- 📦 **Inventory & Delivery Management:** Real-time stock tracking, route optimization, and partner allocation.
+- 🎯 **Marketing:** Campaign management, promo codes, and dynamic peak/off-peak pricing.
+
+### Technical Highlights
+- 🔐 **Secure Authentication:** JWT-based user sessions with bcrypt password hashing.
+- 🛡️ **Robust Security:** Built-in rate limiting, Helmet.js secure headers, and rigorous input validation (express-validator).
+- 🗄️ **Optimized Database:** Highly optimized MongoDB queries with indexing and lean document retrieval.
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend**
+- HTML5, CSS3, JavaScript (ES6+)
+- Tailwind CSS
+
+**Backend**
+- Node.js & Express.js
+- MongoDB & Mongoose
+- JSON Web Tokens (JWT) & bcryptjs
+
+**Integrations & Services**
+- **Payments:** Razorpay, Stripe
+- **Notifications & Tracking:** Twilio, Firebase Admin, Nodemailer, Google Maps API
+- **File Uploads:** Multer
+
+---
+
+## 📁 Project Structure
+
+```text
+DairyDash/
+├── backend/                  # Node.js backend application
+│   ├── config.js             # Centralized configuration and defaults
+│   ├── models/               # Mongoose schemas (User, Product, Order, etc.)
+│   ├── routes/               # Express route handlers
+│   ├── package.json          # Backend dependencies and scripts
+│   ├── Procfile              # Deployment configuration
+│   └── server.js             # Application entry point
+├── *.html                    # Modular frontend views (index, shop, cart, tracking, etc.)
+├── script.js                 # Core frontend JavaScript logic
+└── style.css                 # Global stylesheets
+```
+
+---
+
+## ⚙️ Prerequisites
+
+Ensure you have the following installed on your local machine:
+- **Node.js** (v16.x or higher)
+- **MongoDB** (v5.x or higher)
+- **Git**
+
+---
+
+## 🚀 Installation & Setup
+
+**1. Clone the repository**
+```bash
+git clone https://github.com/ayushjhaa1187-spec/DairyDash.git
+cd DairyDash
+```
+
+**2. Install Backend Dependencies**
+```bash
+cd backend
+npm install
+```
+
+**3. Configure Environment Variables**
+```bash
+# Create a .env file based on the config.js requirements
+touch .env
+```
+*(Populate the `.env` file with the required variables listed in the [Environment Variables](#-environment-variables) section).*
+
+**4. Start the Application**
+```bash
+# Start the backend server in development mode
+cd backend
+npm run dev &
+```
+
+---
+
+## 💻 Usage
+
+To run the application locally:
+
+**Backend Server:**
+```bash
+cd backend
+npm run dev &
+# The API will be available at http://localhost:5000/api
+```
+
+**Frontend:**
+Serve the root directory using any static file server. For example, using `npx serve`:
+```bash
+# From the project root
+npx serve .
+# Access the frontend at http://localhost:3000
+```
+
+---
+
+## 🔐 Environment Variables
+
+Create a `.env` file in the `backend/` directory. The application requires the following variables:
+
+| Variable | Description | Example |
+|---|---|---|
+| `PORT` | API Server Port | `5000` |
+| `NODE_ENV` | Environment mode | `development` or `production` |
+| `MONGODB_URI` | MongoDB Connection String | `mongodb://localhost:27017/dairydash` |
+| `JWT_SECRET` | Secret key for signing JWTs | `super-secret-key-32-chars-min` |
+| `EMAIL_SERVICE` | Email provider for Nodemailer | `gmail` |
+| `EMAIL_USER` | Email address for sending OTPs/receipts | `no-reply@dairydash.com` |
+| `EMAIL_PASSWORD` | App password for the email service | `your-app-password` |
+| `RAZORPAY_KEY` | Razorpay API Key | `rzp_test_xxxxxxx` |
+| `RAZORPAY_SECRET` | Razorpay API Secret | `secret_xxxxxxx` |
+| `GOOGLE_MAPS_KEY` | Google Maps API Key for tracking | `AIzaSy...` |
+| `TWILIO_ACCOUNT_SID`| Twilio Account SID | `ACxxxxxx...` |
+| `TWILIO_AUTH_TOKEN` | Twilio Auth Token | `xxxxxx...` |
+| `TWILIO_PHONE` | Twilio Sender Phone Number | `+1234567890` |
+| `FIREBASE_API_KEY` | Firebase API Key | `AIzaSy...` |
+| `FIREBASE_PROJECT_ID`| Firebase Project ID | `dairydash-12345` |
+
+---
+
+## 📡 API Reference
+
+Here are the core REST API endpoints available in the backend:
+
+### Authentication
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/auth/register` | Register a new user account |
+| `POST` | `/api/auth/login` | Authenticate user and return JWT |
+
+### Products
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/products` | Retrieve all available products |
+| `GET` | `/api/products/:id` | Get details of a specific product |
+| `GET` | `/api/products/category/:category`| Fetch products by category |
+
+### Orders & Tracking
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/orders` | Create a new order |
+| `GET` | `/api/orders/:id` | Fetch details of a specific order |
+| `GET` | `/api/orders/:id/track` | Track live order delivery status |
+| `PUT` | `/api/orders/:id/cancel`| Cancel an existing order |
+
+---
+
+## 🎛️ Configuration
+
+Advanced application settings can be tweaked in `backend/config.js`. Key configuration options include:
+
+- **CORS Configuration:** Define allowed origins (`CORS_ORIGIN`) for production and development.
+- **Rate Limiting:** Modify `RATE_LIMIT_WINDOW` (default: 15 mins) and `RATE_LIMIT_MAX_REQUESTS` (default: 100).
+- **Session Timeout:** Adjust `SESSION_TIMEOUT` (default: 1 hour).
+- **Pagination Defaults:** Set `DEFAULT_PAGE` and `DEFAULT_LIMIT` for list endpoints.
+
+---
+
+## 🤝 Contributing
+
+Contributions are always welcome! To contribute:
+
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature/your-feature-name`.
+3. Make your changes and commit them: `git commit -m 'Add some feature'`.
+4. Push to the branch: `git push origin feature/your-feature-name`.
+5. Open a Pull Request detailing your changes.
+
+Please ensure all tests pass and your code adheres to the existing style.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. See the `LICENSE` file for more details.
+
+---
+
+## 🙏 Acknowledgements
+
+- **Author:** [Ayush Kumar Jha](https://github.com/ayushjhaa1187-spec)
+- Special thanks to the open-source communities behind Express, MongoDB, Tailwind CSS, Razorpay, Twilio, and Firebase.
+- Built with ❤️ for the Indian dairy industry.
