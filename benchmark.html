@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Benchmark</title>
+</head>
+<body>
+<div id="orders-container"></div>
+<script>
+// Mock history
+const history = [];
+for (let i = 0; i < 1000; i++) {
+    history.push({
+        id: i,
+        date: "2023-10-27",
+        status: "Shipped",
+        items: [{name: "Item 1"}, {name: "Item 2"}]
+    });
+}
+
+function loadOrderHistoryOld() {
+    const container = document.getElementById('orders-container');
+    container.innerHTML = '';
+
+    const start = performance.now();
+    history.forEach(order => {
+        const itemNames = order.items.map(i => i.name).join(", ");
+        const card = `<div>${order.id} ${itemNames}</div>`;
+        container.innerHTML += card;
+    });
+    const end = performance.now();
+    return end - start;
+}
+
+function loadOrderHistoryNew() {
+    const container = document.getElementById('orders-container');
+    container.innerHTML = '';
+
+    const start = performance.now();
+    container.innerHTML = history.map(order => {
+        const itemNames = order.items.map(i => i.name).join(", ");
+        return `<div>${order.id} ${itemNames}</div>`;
+    }).join('');
+    const end = performance.now();
+    return end - start;
+}
+
+const oldTime = loadOrderHistoryOld();
+const newTime = loadOrderHistoryNew();
+
+console.log(`Old time: ${oldTime} ms`);
+console.log(`New time: ${newTime} ms`);
+
+</script>
+</body>
+</html>
