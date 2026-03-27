@@ -76,17 +76,38 @@ function renderCartPage() {
         let total = 0;
         cart.forEach((item, index) => {
             total += parseFloat(item.price);
-            const itemHTML = `
-                <div class="flex flex-col md:flex-row items-center gap-6 bg-white p-4 rounded-xl shadow border border-gray-200 mb-4">
-                    <img src="${item.img}" class="w-24 h-24 object-cover rounded-lg bg-gray-100 border border-gray-300">
-                    <div class="flex-grow text-center md:text-left">
-                        <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
-                        <p class="text-gray-600 text-lg">$${item.price}</p>
-                    </div>
-                    <button onclick="removeItem(${index})" class="text-red-600 font-bold underline px-4 py-2 hover:bg-red-50 rounded text-lg">Remove</button>
-                </div>
-            `;
-            container.innerHTML += itemHTML;
+
+            // Fix: Create elements safely instead of using innerHTML
+            const itemDiv = document.createElement('div');
+            itemDiv.className = "flex flex-col md:flex-row items-center gap-6 bg-white p-4 rounded-xl shadow border border-gray-200 mb-4";
+
+            const imgEl = document.createElement('img');
+            imgEl.src = item.img;
+            imgEl.className = "w-24 h-24 object-cover rounded-lg bg-gray-100 border border-gray-300";
+            itemDiv.appendChild(imgEl);
+
+            const textDiv = document.createElement('div');
+            textDiv.className = "flex-grow text-center md:text-left";
+
+            const titleEl = document.createElement('h3');
+            titleEl.className = "text-xl font-bold text-gray-800";
+            titleEl.innerText = item.name;
+            textDiv.appendChild(titleEl);
+
+            const priceEl = document.createElement('p');
+            priceEl.className = "text-gray-600 text-lg";
+            priceEl.innerText = '$' + item.price;
+            textDiv.appendChild(priceEl);
+
+            itemDiv.appendChild(textDiv);
+
+            const btnEl = document.createElement('button');
+            btnEl.className = "text-red-600 font-bold underline px-4 py-2 hover:bg-red-50 rounded text-lg";
+            btnEl.innerText = "Remove";
+            btnEl.onclick = function() { removeItem(index); };
+            itemDiv.appendChild(btnEl);
+
+            container.appendChild(itemDiv);
         });
         document.getElementById('total-price').innerText = '$' + total.toFixed(2);
     }
