@@ -183,10 +183,10 @@ function displayProducts(products) {
   const container = document.getElementById('productsContainer');
   container.innerHTML = products.map(product => `
     <div class="product-card">
-      <h3>${product.name}</h3>
-      <p>${product.description}</p>
-      <price>₹${product.price}</price>
-      <button onclick="addToCart('${product._id}')">Add to Cart</button>
+      <h3>${escapeHTML(product.name)}</h3>
+      <p>${escapeHTML(product.description)}</p>
+      <price>₹${escapeHTML(String(product.price))}</price>
+      <button onclick="addToCart('${escapeHTML(product._id)}')">Add to Cart</button>
     </div>
   `).join('');
 }
