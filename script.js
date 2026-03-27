@@ -74,6 +74,7 @@ function renderCartPage() {
         if(summary) summary.style.display = 'block';
 
         let total = 0;
+        let cartHTML = "";
         cart.forEach((item, index) => {
             total += parseFloat(item.price);
             const itemHTML = `
@@ -86,8 +87,9 @@ function renderCartPage() {
                     <button onclick="removeItem(${index})" class="text-red-600 font-bold underline px-4 py-2 hover:bg-red-50 rounded text-lg">Remove</button>
                 </div>
             `;
-            container.innerHTML += itemHTML;
+            cartHTML += itemHTML;
         });
+        container.innerHTML = cartHTML;
         document.getElementById('total-price').innerText = '$' + total.toFixed(2);
     }
 }
