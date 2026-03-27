@@ -65,11 +65,23 @@ router.get('/my-orders', authenticate, async (req, res) => {
 // Get order details with tracking
 router.get('/:orderId/track', authenticate, async (req, res) => {
   try {
-    const order = await Order.findById(req.params.orderId);
+    const query = req.user.role === 'admin'
+      ? { _id: req.params.orderId }
+      : {
+          _id: req.params.orderId,
+          $or: [{ userId: req.user._id }, { customerId: req.user._id }]
+        };
+
+    const order = await Order.findOne(query);
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found or unauthorized' });
+    }
+
     const tracking = await DeliveryTracking.findOne({ orderId: req.params.orderId });
 
-    if (!order || !tracking) {
-      return res.status(404).json({ success: false, message: 'Order not found' });
+    if (!tracking) {
+      return res.status(404).json({ success: false, message: 'Tracking not found for this order' });
     }
 
     res.json({ success: true, order, tracking });
@@ -82,11 +94,24 @@ router.get('/:orderId/track', authenticate, async (req, res) => {
 router.put('/:orderId/status', authenticate, async (req, res) => {
   try {
     const { status } = req.body;
-    const order = await Order.findByIdAndUpdate(
-      req.params.orderId,
+
+    // Only admins or the order owner can update status (though usually only admins/delivery partners should update status, we align with the cancellation logic for safety)
+    const query = req.user.role === 'admin'
+      ? { _id: req.params.orderId }
+      : {
+          _id: req.params.orderId,
+          $or: [{ userId: req.user._id }, { customerId: req.user._id }]
+        };
+
+    const order = await Order.findOneAndUpdate(
+      query,
       { status },
       { new: true }
     );
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found or unauthorized' });
+    }
 
     res.json({ success: true, message: 'Order status updated', order });
   } catch (error) {
@@ -97,11 +122,22 @@ router.put('/:orderId/status', authenticate, async (req, res) => {
 // Cancel order
 router.post('/:orderId/cancel', authenticate, async (req, res) => {
   try {
-    const order = await Order.findByIdAndUpdate(
-      req.params.orderId,
+    const query = req.user.role === 'admin'
+      ? { _id: req.params.orderId }
+      : {
+          _id: req.params.orderId,
+          $or: [{ userId: req.user._id }, { customerId: req.user._id }]
+        };
+
+    const order = await Order.findOneAndUpdate(
+      query,
       { status: 'Cancelled' },
       { new: true }
     );
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found or unauthorized' });
+    }
 
     res.json({ success: true, message: 'Order cancelled successfully', order });
   } catch (error) {
