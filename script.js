@@ -150,12 +150,11 @@ function loadOrderHistory() {
     }
 
     if(container) {
-        container.innerHTML = '';
-        history.forEach(order => {
+        const cardsHTML = history.map(order => {
             // Build a string of item names (e.g., "Phone, Pills")
             const itemNames = order.items.map(i => i.name).join(", ");
             
-            const card = `
+            return `
                 <div class="bg-white p-6 rounded-xl shadow-md border-2 border-gray-100 mb-6">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b pb-4">
                         <div>
@@ -182,8 +181,9 @@ function loadOrderHistory() {
                     </div>
                 </div>
             `;
-            container.innerHTML += card;
-        });
+        }).join("");
+
+        container.innerHTML = cardsHTML;
         
         container.style.display = 'block';
         if(emptyMsg) emptyMsg.style.display = 'none';
