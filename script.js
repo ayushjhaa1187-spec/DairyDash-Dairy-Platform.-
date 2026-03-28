@@ -189,3 +189,10 @@ function loadOrderHistory() {
         if(emptyMsg) emptyMsg.style.display = 'none';
     }
 }
+
+/* =========================================
+   4. EXPORTS FOR TESTING
+   ========================================= */
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { removeItem, addToCart, updateCartCount, renderCartPage, loadOrderHistory, placeOrder };
+}
