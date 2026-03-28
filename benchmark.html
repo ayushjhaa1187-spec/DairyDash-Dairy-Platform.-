@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Benchmark</title>
+</head>
+<body>
+    <div id="cart-items-container"></div>
+    <div id="total-price"></div>
+    <script>
+        // Mock the environment
+        const mockCart = Array.from({ length: 500 }, (_, i) => ({
+            name: `Product ${i}`,
+            price: (Math.random() * 100).toFixed(2),
+            img: `img${i}.jpg`
+        }));
+
+        localStorage.setItem('seniorCart', JSON.stringify(mockCart));
+
+        function renderCartPageBaseline() {
+            const cart = JSON.parse(localStorage.getItem('seniorCart')) || [];
+            const container = document.getElementById('cart-items-container');
+
+            container.innerHTML = '';
+            let total = 0;
+            const start = performance.now();
+            cart.forEach((item, index) => {
+                total += parseFloat(item.price);
+                const itemHTML = `
+                    <div class="flex flex-col md:flex-row items-center gap-6 bg-white p-4 rounded-xl shadow border border-gray-200 mb-4">
+                        <img src="${item.img}" class="w-24 h-24 object-cover rounded-lg bg-gray-100 border border-gray-300">
+                        <div class="flex-grow text-center md:text-left">
+                            <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
+                            <p class="text-gray-600 text-lg">$${item.price}</p>
+                        </div>
+                        <button onclick="removeItem(${index})" class="text-red-600 font-bold underline px-4 py-2 hover:bg-red-50 rounded text-lg">Remove</button>
+                    </div>
+                `;
+                container.innerHTML += itemHTML;
+            });
+            document.getElementById('total-price').innerText = '$' + total.toFixed(2);
+            const end = performance.now();
+            return end - start;
+        }
+
+        function renderCartPageOptimized() {
+            const cart = JSON.parse(localStorage.getItem('seniorCart')) || [];
+            const container = document.getElementById('cart-items-container');
+
+            container.innerHTML = '';
+            let total = 0;
+            const start = performance.now();
+
+            let htmlBuffer = '';
+            cart.forEach((item, index) => {
+                total += parseFloat(item.price);
+                htmlBuffer += `
+                    <div class="flex flex-col md:flex-row items-center gap-6 bg-white p-4 rounded-xl shadow border border-gray-200 mb-4">
+                        <img src="${item.img}" class="w-24 h-24 object-cover rounded-lg bg-gray-100 border border-gray-300">
+                        <div class="flex-grow text-center md:text-left">
+                            <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
+                            <p class="text-gray-600 text-lg">$${item.price}</p>
+                        </div>
+                        <button onclick="removeItem(${index})" class="text-red-600 font-bold underline px-4 py-2 hover:bg-red-50 rounded text-lg">Remove</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = htmlBuffer;
+
+            document.getElementById('total-price').innerText = '$' + total.toFixed(2);
+            const end = performance.now();
+            return end - start;
+        }
+
+        // Run baseline
+        const t1 = renderCartPageBaseline();
+        console.log(`Baseline: ${t1} ms`);
+
+        // Run optimized
+        const t2 = renderCartPageOptimized();
+        console.log(`Optimized: ${t2} ms`);
+
+        // Provide output to document so we can read it easily via puppeteer/playwright or basic dom
+        document.body.innerHTML += `<div id="results">Baseline: ${t1.toFixed(2)} ms<br>Optimized: ${t2.toFixed(2)} ms<br>Speedup: ${(t1/t2).toFixed(2)}x</div>`;
+    </script>
+</body>
+</html>
