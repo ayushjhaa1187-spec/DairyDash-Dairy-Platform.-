@@ -114,8 +114,10 @@ router.put('/:orderId/mark-delivered', authenticate, async (req, res) => {
       location: tracking.currentLocation
     });
 
-    await tracking.save();
-    await Order.findByIdAndUpdate(req.params.orderId, { status: 'Delivered' });
+    await Promise.all([
+      tracking.save(),
+      Order.findByIdAndUpdate(req.params.orderId, { status: 'Delivered' })
+    ]);
 
     res.json({ success: true, message: 'Order marked as delivered', tracking });
   } catch (error) {
