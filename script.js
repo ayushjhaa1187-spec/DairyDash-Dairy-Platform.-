@@ -189,3 +189,11 @@ function loadOrderHistory() {
         if(emptyMsg) emptyMsg.style.display = 'none';
     }
 }
+
+// Export functions for testing
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        loadOrderHistory,
+        // add other functions here if needed
+    };
+}
