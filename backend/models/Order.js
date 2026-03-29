@@ -7,10 +7,10 @@ const OrderSchema = new mongoose.Schema({
   
   // Order Items
   items: [{
-    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-    productName: String,
-    quantity: Number,
-    price: Number,
+    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+    productName: { type: String, required: true },
+    quantity: { type: Number, required: true, min: 1 },
+    price: { type: Number, required: true, min: 0 },
     subtotal: Number
   }],
   
