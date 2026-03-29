@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/opendyslexic@2.0.0/open-dyslexic.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
     <style>
         :root { --primary: #208090; --bg-color: #F8FAFC; --focus-ring: #F59E0B; }
         body { font-family: 'Source Sans 3', sans-serif; background-color: var(--bg-color); line-height: 1.6; }
@@ -29,7 +30,7 @@
                 <div class="w-14 h-14 bg-[#208090] rounded-full flex items-center justify-center text-white text-3xl font-bold" aria-hidden="true">S</div>
                 <span class="text-3xl font-bold text-[#208090]">Senior Shop</span>
             </a>
-            
+
             <div class="flex items-center gap-3">
                 <div class="relative">
                     <button id="a11y-btn" onclick="toggleMenu()" class="flex items-center gap-2 bg-gray-100 border-2 border-gray-400 text-gray-800 px-4 py-3 rounded-lg font-bold hover:bg-gray-200 shadow-sm" aria-expanded="false" aria-controls="a11y-menu">
@@ -50,12 +51,12 @@
 
     <main class="container mx-auto px-4 py-8 max-w-2xl" role="main">
         <h1 class="text-3xl font-bold mb-6">Checkout Details</h1>
-        
+
         <form id="checkout-form" onsubmit="validateAndSubmit(event)" class="bg-white p-6 rounded-xl shadow border border-gray-200" novalidate>
-            
+
             <div class="mb-8">
                 <h2 class="text-xl font-bold mb-4 bg-gray-100 p-3 rounded text-[#208090]">Shipping Address</h2>
-                
+
                 <div class="mb-4">
                     <label for="name" class="block text-lg font-bold">Full Name (Required)</label>
                     <input type="text" id="name" class="input-lg" placeholder="e.g. Martha Smith" autocomplete="name" required aria-required="true">
@@ -104,16 +105,16 @@
         function validateAndSubmit(event) {
             event.preventDefault();
             let isValid = true;
-            
+
             ['name', 'address', 'zip'].forEach(id => {
                 const field = document.getElementById(id);
                 const error = document.getElementById(id + '-error');
-                
+
                 if (!field.value.trim()) {
                     error.style.display = 'block';
                     field.setAttribute('aria-invalid', 'true');
                     field.style.borderColor = '#DC2626';
-                    if(isValid) field.focus(); 
+                    if(isValid) field.focus();
                     isValid = false;
                 } else {
                     error.style.display = 'none';
