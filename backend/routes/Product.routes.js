@@ -78,9 +78,18 @@ router.post('/create', authenticate, async (req, res) => {
 // Update product (admin only)
 router.put('/:productId/update', authenticate, async (req, res) => {
   try {
+    const { name, description, price, category, stock, image } = req.body;
+    const updateData = {};
+    if (name !== undefined) updateData.name = name;
+    if (description !== undefined) updateData.description = description;
+    if (price !== undefined) updateData.price = price;
+    if (category !== undefined) updateData.category = category;
+    if (stock !== undefined) updateData.stock = stock;
+    if (image !== undefined) updateData.image = image;
+
     const product = await Product.findByIdAndUpdate(
       req.params.productId,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
 
