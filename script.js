@@ -74,20 +74,19 @@ function renderCartPage() {
         if(summary) summary.style.display = 'block';
 
         let total = 0;
-        cart.forEach((item, index) => {
+        container.innerHTML = cart.map((item, index) => {
             total += parseFloat(item.price);
-            const itemHTML = `
+            return `
                 <div class="flex flex-col md:flex-row items-center gap-6 bg-white p-4 rounded-xl shadow border border-gray-200 mb-4">
                     <img src="${item.img}" class="w-24 h-24 object-cover rounded-lg bg-gray-100 border border-gray-300">
                     <div class="flex-grow text-center md:text-left">
                         <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
-                        <p class="text-gray-600 text-lg">$${item.price}</p>
+                        <p class="text-gray-600 text-lg">${item.price}</p>
                     </div>
                     <button onclick="removeItem(${index})" class="text-red-600 font-bold underline px-4 py-2 hover:bg-red-50 rounded text-lg">Remove</button>
                 </div>
             `;
-            container.innerHTML += itemHTML;
-        });
+        }).join('');
         document.getElementById('total-price').innerText = '$' + total.toFixed(2);
     }
 }
@@ -151,11 +150,11 @@ function loadOrderHistory() {
 
     if(container) {
         container.innerHTML = '';
-        history.forEach(order => {
+        container.innerHTML = history.map(order => {
             // Build a string of item names (e.g., "Phone, Pills")
             const itemNames = order.items.map(i => i.name).join(", ");
             
-            const card = `
+            return `
                 <div class="bg-white p-6 rounded-xl shadow-md border-2 border-gray-100 mb-6">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b pb-4">
                         <div>
@@ -182,8 +181,7 @@ function loadOrderHistory() {
                     </div>
                 </div>
             `;
-            container.innerHTML += card;
-        });
+        }).join('');
         
         container.style.display = 'block';
         if(emptyMsg) emptyMsg.style.display = 'none';
