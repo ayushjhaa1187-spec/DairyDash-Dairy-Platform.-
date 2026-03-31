@@ -20,12 +20,22 @@ router.get('/all', async (req, res) => {
     }
 
     const skip = (page - 1) * limit;
-    const products = await Product.find(query)
-      .limit(parseInt(limit))
-      .skip(skip)
-      .sort({ createdAt: -1 });
+    const limitInt = parseInt(limit);
 
-    const total = await Product.countDocuments(query);
+    // Optimize query by using aggregation with $facet to get both products and total count in a single database operation
+    const result = await Product.aggregate([
+      { $match: query },
+      { $sort: { createdAt: -1 } },
+      {
+        $facet: {
+          products: [{ $skip: skip }, { $limit: limitInt }],
+          totalCount: [{ $count: 'count' }]
+        }
+      }
+    ]);
+
+    const products = result[0].products;
+    const total = result[0].totalCount.length > 0 ? result[0].totalCount[0].count : 0;
 
     res.json({
       success: true,
