@@ -44,7 +44,12 @@ function addToCart(productName, price, image) {
 }
 
 function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('seniorCart')) || [];
+    let cart = [];
+    try {
+        cart = JSON.parse(localStorage.getItem('seniorCart')) || [];
+    } catch (e) {
+        cart = [];
+    }
     const countElements = document.querySelectorAll('.cart-count-display');
     countElements.forEach(el => el.innerText = `Cart (${cart.length})`);
 }
@@ -188,4 +193,17 @@ function loadOrderHistory() {
         container.style.display = 'block';
         if(emptyMsg) emptyMsg.style.display = 'none';
     }
+}
+
+// Export functions for testing
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        updateCartCount,
+        addToCart,
+        showToast,
+        renderCartPage,
+        removeItem,
+        placeOrder,
+        loadOrderHistory
+    };
 }
