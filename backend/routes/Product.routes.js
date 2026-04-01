@@ -13,10 +13,7 @@ router.get('/all', async (req, res) => {
       query.category = category;
     }
     if (search) {
-      query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
-      ];
+      query.$text = { $search: search };
     }
 
     const skip = (page - 1) * limit;
