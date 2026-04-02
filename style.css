@@ -1,240 +1,117 @@
-/* =========================================
-   1. CORE VARIABLES & RESET
-   ========================================= */
 :root {
-    --primary: #208090;
-    --bg-color: #F8FAFC;
-    --text-color: #1F2937;
-    --focus-ring: #F59E0B;
+  --primary: #2ECC71; /* Fresh Green */
+  --primary-dark: #27AE60;
+  --secondary: #3498DB; /* Sky Blue */
+  --accent: #F1C40F; /* Sunflower Yellow */
+  --danger: #E74C3C;
+  --text-dark: #2C3E50;
+  --text-light: #7F8C8D;
+  --bg-light: #F8F9FA;
+  --white: #FFFFFF;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 body {
-    font-family: 'Source Sans 3', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.6;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
 }
 
-/* =========================================
-   2. ACCESSIBILITY UTILITIES (CRITICAL)
-   ========================================= */
+.bg-primary { background-color: var(--primary) !important; }
+.text-primary { color: var(--primary) !important; }
+.bg-secondary { background-color: var(--secondary) !important; }
+.text-secondary { color: var(--secondary) !important; }
 
-/* Visible Focus Indicator (Motor Impairments) */
+/* Sticky Header */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: all 0.3s ease;
+}
+
+/* Hero Section */
+.hero-gradient {
+  background: linear-gradient(135deg, #2ECC71 0%, #27AE60 100%);
+}
+
+/* Cards */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #E5E7EB;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(46, 204, 113, 0.15);
+  border-color: var(--primary);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* Quantity Selector */
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.quantity-btn {
+  background: var(--primary);
+  color: white;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.quantity-input {
+  width: 40px;
+  text-align: center;
+  border: none;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* Badges */
+.badge-discount {
+  background: var(--danger);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Accessibility */
 *:focus-visible {
-    outline: 4px solid var(--focus-ring) !important;
-    outline-offset: 4px;
-    box-shadow: 0 0 0 4px #fff;
+  outline: 3px solid var(--accent) !important;
+  outline-offset: 2px;
 }
-
-/* Skip Navigation Link (Keyboard Users) */
-.skip-link {
-    position: absolute;
-    top: -999px;
-    left: 0;
-    background: #208090;
-    color: white;
-    padding: 16px;
-    z-index: 100;
-    font-weight: bold;
-    text-decoration: none;
-    transition: top 0.3s;
-}
-
-.skip-link:focus {
-    top: 0;
-}
-
-/* Interactive Elements Sizing */
-button, a, input {
-    min-height: 48px;
-    min-width: 48px;
-}
-
-/* =========================================
-   3. ACCESSIBILITY MODES (INNOVATION)
-   ========================================= */
-
-/* High Contrast Mode */
-body.contrast-high {
-    --primary: #FFFF00;
-    --bg-color: #000000;
-    --text-color: #FFFFFF;
-    background-color: #000000 !important;
-    color: #FFFFFF !important;
-}
-
-body.contrast-high header, 
-body.contrast-high footer, 
-body.contrast-high section, 
-body.contrast-high article, 
-body.contrast-high div, 
-body.contrast-high nav,
-body.contrast-high .bg-white,
-body.contrast-high .bg-gray-100 {
-    background-color: #000000 !important;
-    color: #FFFF00 !important;
-    border-color: #FFFF00 !important;
-}
-
-body.contrast-high a, 
-body.contrast-high button,
-body.contrast-high input {
-    background-color: #000000 !important;
-    color: #FFFF00 !important;
-    border: 2px solid #FFFFFF !important;
-    font-weight: bold;
-}
-
-body.contrast-high img {
-    filter: grayscale(100%) contrast(150%);
-}
-
-/* Large Button Mode (Motor Innovation) */
-body.large-targets button, 
-body.large-targets a, 
-body.large-targets input {
-    min-height: 64px !important;
-    min-width: 64px !important;
-    font-size: 1.25rem !important;
-    padding: 16px 24px !important;
-}
-
-/* Dyslexia Friendly Font */
-body.dyslexia-mode {
-    font-family: 'OpenDyslexic', sans-serif !important;
-}
-
-/* =========================================
-   4. COMPONENT STYLES
-   ========================================= */
-
-/* Accessibility Menu */
-.a11y-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: 340px;
-    background: white;
-    border: 2px solid #208090;
-    padding: 20px;
-    z-index: 50;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    border-radius: 12px;
-}
-.a11y-menu.open {
-    display: block;
-}
-
-/* Voice Command Bar */
-#voice-bar {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: #208090;
-    color: white;
-    padding: 24px;
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    z-index: 100;
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
-}
-.mic-pulse {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-color: #F59E0B;
-    border-radius: 50%;
-    margin-right: 12px;
-    animation: pulse 1s infinite;
-}
-
-/* Toast Notification */
-#toast {
-    visibility: hidden;
-    min-width: 280px;
-    margin-left: -140px;
-    background-color: #208090;
-    color: #fff;
-    text-align: center;
-    border-radius: 50px;
-    padding: 16px;
-    position: fixed;
-    z-index: 100;
-    left: 50%;
-    bottom: 30px;
-    font-size: 18px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    font-weight: bold;
-}
-#toast.show {
-    visibility: visible;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-/* Form Inputs */
-.input-lg {
-    width: 100%;
-    padding: 18px;
-    font-size: 1.25rem;
-    border: 2px solid #9CA3AF;
-    border-radius: 8px;
-    margin-top: 8px;
-}
-.input-lg:focus {
-    border-color: #208090;
-    outline: 4px solid var(--focus-ring);
-}
-.error-msg {
-    color: #DC2626;
-    font-weight: bold;
-    margin-top: 4px;
-    display: none;
-}
-
-/* Timeline (Tracking Page) */
-.timeline-item {
-    position: relative;
-    padding-bottom: 3rem;
-    border-left: 4px solid #E5E7EB;
-    margin-left: 20px;
-    padding-left: 30px;
-}
-.timeline-item:last-child {
-    border-left: 4px solid transparent;
-}
-.timeline-item.completed {
-    border-left-color: #208090;
-}
-.timeline-dot {
-    position: absolute;
-    left: -14px;
-    top: 0;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: #E5E7EB;
-    border: 4px solid #fff;
-}
-.timeline-item.completed .timeline-dot {
-    background: #208090;
-}
-.timeline-item.active .timeline-dot {
-    background: #F59E0B;
-    width: 32px;
-    height: 32px;
-    left: -18px;
-    animation: pulse 2s infinite;
-}
-
-/* Animation Keyframes */
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
-    100% { transform: scale(1.5); opacity: 0; box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
-}
-@keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-@keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
