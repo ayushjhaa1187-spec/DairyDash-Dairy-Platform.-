@@ -23,7 +23,8 @@ router.get('/all', async (req, res) => {
     const products = await Product.find(query)
       .limit(parseInt(limit))
       .skip(skip)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
     const total = await Product.countDocuments(query);
 
@@ -103,7 +104,7 @@ router.delete('/:productId/delete', authenticate, async (req, res) => {
 // Get products by category
 router.get('/category/:category', async (req, res) => {
   try {
-    const products = await Product.find({ category: req.params.category });
+    const products = await Product.find({ category: req.params.category }).lean();
     res.json({ success: true, products });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
