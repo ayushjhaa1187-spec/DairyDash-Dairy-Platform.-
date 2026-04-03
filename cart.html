@@ -66,7 +66,7 @@
     <script src="script.js"></script>
     <script>
         function loadCart() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cart = getSafeStorage('cart', []);
             const cartItems = document.getElementById('cart-items');
             const emptyCart = document.getElementById('empty-cart');
             
@@ -103,7 +103,7 @@
         }
 
         function updateQuantity(index, change) {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cart = getSafeStorage('cart', []);
             cart[index].quantity += change;
             if (cart[index].quantity <= 0) cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
@@ -111,7 +111,7 @@
         }
 
         function removeItem(index) {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cart = getSafeStorage('cart', []);
             cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
             loadCart();
