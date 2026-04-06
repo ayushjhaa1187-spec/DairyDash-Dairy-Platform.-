@@ -1,0 +1,5 @@
+🧪 Add tests for POST /:orderId/cancel route
+
+🎯 **What:** Added tests for the untested API route `POST /:orderId/cancel` in `backend/routes/Order.routes.js` to ensure the cancellation logic functions correctly.
+📊 **Coverage:** The new tests in `backend/tests/routes/Order.routes.test.js` mock the database updates and confirm both the success scenario (valid cancellation updates status and returns 200) and the error scenario (database errors return 400). Added `supertest` to run the tests effectively.
+✨ **Result:** Test coverage improved and order cancellation logic is now safely verified.
